@@ -14,22 +14,28 @@ export const SettingsMenu = ()=> {
     exec(EMAIL_PREFIX, SETTINGS_CALLBACK)
     exec(EMAIL_SUFFIX, SETTINGS_CALLBACK)
     exec(STARTUP_SCRIPT, SETTINGS_CALLBACK)
-  }, [])
 
-  window.electron.ipcRenderer.on(SETTINGS_CALLBACK, (args)=>{
-    const key = args[0]
-    const val = args[1]
-    switch (key){
-      case EMAIL_PREFIX:
+    window.electron.ipcRenderer.on(SETTINGS_CALLBACK, (args)=>{
+      const key = args[0]
+      const val = args[1]
+      switch (key){
+        case EMAIL_PREFIX:
           setEmailPrefix(val)
           break
-      case EMAIL_SUFFIX:
-        setEmailSuffix(val)
-        break
-      case STARTUP_SCRIPT:
-        setStartupScript(val)
+        case EMAIL_SUFFIX:
+          setEmailSuffix(val)
+          break
+        case STARTUP_SCRIPT:
+          setStartupScript(val)
+      }
+    })
+
+    return ()=>{
+      window.electron.ipcRenderer.removeAllListeners([SETTINGS_CALLBACK])
     }
-  })
+  }, [])
+
+
 
   const saveConfig = ()=>{
     window.electron.ipcRenderer.sendMessage('store-save',[EMAIL_PREFIX, emailPrefix])

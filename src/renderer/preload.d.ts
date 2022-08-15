@@ -11,6 +11,7 @@ declare global {
         ): (() => void) | undefined;
         once(channel: string, func: (...args: unknown[]) => void): void;
         sendSync(channel: Channels, args: unknown[]): string;
+        removeAllListeners(channels: string[]): void
       };
     };
   }
