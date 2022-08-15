@@ -196,6 +196,7 @@
       ]
     },
     "win": {
+      "verifyUpdateCodeSignature": false,
       "target": [
         "nsis"
       ]
@@ -216,8 +217,8 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate"
+      "owner": "SamTV12345",
+      "repo": "ElectronUtils"
     }
   },
   "collective": {
