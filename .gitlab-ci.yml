@@ -1,0 +1,44 @@
+stages:
+    - build
+
+buildWindows:
+    tags: [windows]
+    stage: build
+    script:
+      - npm install
+      - npm run package
+    artifacts:
+      expire_in: 30 days
+      paths:
+        - ./release/build/
+    only:
+      - main
+
+buildMac:
+    image: node
+    tags: [shared-macos-amd64]
+    stage: build
+    script:
+      - npm install
+      - npm run package
+    artifacts:
+      expire_in: 30 days
+      paths:
+        - ./release/build/
+    only:
+      - main
+
+buildLinux:
+    image: node
+    tags: [linux]
+    stage: build
+    script:
+      - npm install
+      - npm run package
+    artifacts:
+      expire_in: 30 days
+      paths:
+        - ./release/build/
+    only:
+      - main
+
