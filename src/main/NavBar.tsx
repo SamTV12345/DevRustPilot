@@ -19,8 +19,9 @@ export function BasicExample() {
             <Nav.Link onClick={() => navigate('/wsl')}>WSL</Nav.Link>
             <NavDropdown title="Generate" id="basic-nav-dropdown">
               <NavDropdown.Item onClick={() => navigate('/generate/person')}>Person</NavDropdown.Item>
-              {/*<NavDropdown.Divider />*/}
-              </NavDropdown>
+              <NavDropdown.Divider />
+              <NavDropdown.Item onClick={() => navigate('/generate/ids')}>IDs</NavDropdown.Item>
+            </NavDropdown>
             <Nav.Link onClick={() => navigate('/settings')}>Einstellungen</Nav.Link>
 
           </Nav>
