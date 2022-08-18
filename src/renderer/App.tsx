@@ -7,6 +7,7 @@ import { Home } from '../main/Home';
 import {WSL} from "./WSL";
 import { Person } from './generate/Person';
 import { SettingsMenu } from './Settings';
+import { IDs } from './generate/IDs';
 
 const Hello = () => {
   const [input, setInput] = useState<string>('');
@@ -67,6 +68,7 @@ export default function App() {
             <Route path="/utf16" element={<Hello />} />
             <Route path="/wsl" element={<WSL/>}/>
           <Route path="/generate/person" element={<Person/>}/>
+          <Route path="/generate/ids" element={<IDs/>}/>
           <Route path="/settings" element={<SettingsMenu/>}/>
         </Routes>
       </Router>
