@@ -60,7 +60,7 @@ export default function App() {
   return (
     <>
       <Router basename="/">
-        <BasicExample expand="lg" />
+        <BasicExample/>
         <Routes>
           <Route path="/" element={<Navigate to={"/home"}/>} />
             <Route path="/home" element={<Home/>} />
