@@ -23,6 +23,7 @@ export const Person = () => {
     }
     }, [firstname, lastname])
 
+  useEffect(()=>{
   window.electron.ipcRenderer.on('person-callback', (args)=>{
     const key = args[0]
     const val = args[1]
@@ -35,6 +36,10 @@ export const Person = () => {
         break
     }
   })
+    return ()=>{
+    window.electron.ipcRenderer.removeAllListeners(['person-callback'])
+    }
+  }, [])
 
   return <div className="h-75 d-flex justify-content-center align-items-center"><div className='container p-4'>
     <div className='row mb-3'>

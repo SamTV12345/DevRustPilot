@@ -19,6 +19,11 @@ contextBridge.exposeInMainWorld('electron', {
     },
     sendSync(channel: Channels, args: unknown[]){
       ipcRenderer.sendSync(channel, args)
+    },
+    removeAllListeners(channels: string[]){
+      channels.forEach(channel=>{
+      ipcRenderer.removeAllListeners(channel)
+    })
     }
   },
 });

@@ -15,35 +15,42 @@ export const WSL = () => {
     exec(STARTUP_SCRIPT, 'wsl-callback')
   }, [])
 
-  window.electron.ipcRenderer.on('wsl-callback', (args)=>{
-    const key = args[0]
-    const val = args[1]
-    switch (key){
-      case STARTUP_SCRIPT:
-        setStartUpScript(val)
-    }
-  })
 
-  window.electron.ipcRenderer.on('cmd-callback', (args) => {
-    const res: string[] = args.split(/[\r\n|\n|\r]/).filter(String);
-
-    const resultingArray = res
-      .map(v => v.replace(/\u0000/g, '')) // remove all \u0000
-      .map(v => { // remove all double spaces
-        while (v.replace(/\s\s/g, ' ') != v)
-          v = v.replace(/\s\s/g, ' ').trim();
-        return v;
-      })
-      .filter(v => v) // remove empty lines
-      .map(v => v.split(' ')); // split by space
-
-    resultingArray.forEach(res=>{
-      if(res.length<4){
-        res.unshift("None")
+  useEffect(()=> {
+    window.electron.ipcRenderer.on('wsl-callback', (args) => {
+      const key = args[0]
+      const val = args[1]
+      switch (key) {
+        case STARTUP_SCRIPT:
+          setStartUpScript(val)
       }
     })
-    setDistroInformation(resultingArray);
-  });
+
+    window.electron.ipcRenderer.on('cmd-callback', (args) => {
+      const res: string[] = args.split(/[\r\n|\n|\r]/).filter(String);
+
+      const resultingArray = res
+        .map(v => v.replace(/\u0000/g, '')) // remove all \u0000
+        .map(v => { // remove all double spaces
+          while (v.replace(/\s\s/g, ' ') != v)
+            v = v.replace(/\s\s/g, ' ').trim();
+          return v;
+        })
+        .filter(v => v) // remove empty lines
+        .map(v => v.split(' ')); // split by space
+
+      resultingArray.forEach(res => {
+        if (res.length < 4) {
+          res.unshift("None")
+        }
+      })
+      setDistroInformation(resultingArray);
+    })
+      return ()=>{
+        window.electron.ipcRenderer.removeAllListeners(['wsl-callback', 'cmd-callback'])
+      }
+    }, []
+  )
 
   const createChip = ()=>{
     return <div className="badge text-dark">
@@ -96,8 +103,8 @@ export const WSL = () => {
         </thead>
         <tbody>
         {
-          distroInformation.slice(1).map(row => {
-            return <tr>
+          distroInformation.slice(1).map((row,index) => {
+            return <tr key={index}>
               <td>
                 {row[1]} {row[0].includes("*")&&createChip()}
               </td>
