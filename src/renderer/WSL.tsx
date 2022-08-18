@@ -59,6 +59,10 @@ export const WSL = () => {
   }
 
   const createStatusRep = (status:string)=>{
+
+    if(status === undefined){
+      return <span>Loading</span>
+    }
     if(status.includes("Stopped")){
       return <span>&#128308;</span>
     }
@@ -76,7 +80,7 @@ export const WSL = () => {
       <ArrowClockwise className="ms-2 mb-2 h2" onClick={()=>runCommand('wsl --list --verbose')} />
       <Play className="h2" onClick={()=>{
         runCommand('wsl')
-        if(startUpScript.length>1){
+        if(startUpScript && startUpScript.length>1){
           runCommand('bash -c "'+startUpScript+'"')
         }
       }}/>
