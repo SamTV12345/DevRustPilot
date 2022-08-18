@@ -53,6 +53,18 @@ ipcMain.on('cmd', async (event, arg)=>{
   });
 })
 
+ipcMain.on('cmd-off', async (event, arg)=>{
+  const execute = (command, callback)=>{
+    exec(command, (error, stdout, stderr) => {
+      callback(stdout);
+    });
+  };
+
+// call the function
+  execute(arg, (output) => {
+  });
+})
+
 ipcMain.on('store-save', async (event, args: string[])=>{
   const key = args[0]
   const value = args[1]

@@ -11,6 +11,10 @@ export const WSL = () => {
     window.electron.ipcRenderer.sendMessage('cmd', command);
   };
 
+  const runCommandWithoutRepBack = (command:string) => {
+    window.electron.ipcRenderer.sendMessage('cmd-off', command);
+  };
+
   useEffect(()=>{
     exec(STARTUP_SCRIPT, 'wsl-callback')
   }, [])
@@ -79,9 +83,9 @@ export const WSL = () => {
     <span><h1 className="d-inline">WSL-Infos</h1>
       <ArrowClockwise className="ms-2 mb-2 h2" onClick={()=>runCommand('wsl --list --verbose')} />
       <Play className="h2" onClick={()=>{
-        runCommand('wsl')
+        runCommandWithoutRepBack('wsl')
         if(startUpScript && startUpScript.length>1){
-          runCommand('bash -c "'+startUpScript+'"')
+          runCommandWithoutRepBack('bash -c "'+startUpScript+'"')
         }
       }}/>
     </span>
