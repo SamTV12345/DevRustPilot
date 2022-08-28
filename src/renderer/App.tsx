@@ -7,11 +7,14 @@ import { Person } from './generate/Person';
 import { SettingsMenu } from './Settings';
 import { IDs } from './generate/IDs';
 import { UTFConverter } from './UTFConverter';
+import { JsonViewer } from './jwt/JsonViewer';
+import { Alert } from './alerts/Alert';
 
 
 export default function App() {
   return (
     <>
+      <Alert/>
       <Router basename="/">
         <BasicExample/>
         <Routes>
@@ -22,6 +25,7 @@ export default function App() {
           <Route path="/generate/person" element={<Person/>}/>
           <Route path="/generate/ids" element={<IDs/>}/>
           <Route path="/settings" element={<SettingsMenu/>}/>
+          <Route path="/jwt" element={<JsonViewer/>}/>
         </Routes>
       </Router>
     </>
