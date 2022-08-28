@@ -21,6 +21,7 @@ export function BasicExample() {
               <NavDropdown.Item onClick={() => navigate('/generate/person')}>Person</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item onClick={() => navigate('/generate/ids')}>IDs</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => navigate('/jwt')}>JWT</NavDropdown.Item>
             </NavDropdown>
             <Nav.Link onClick={() => navigate('/settings')}>Einstellungen</Nav.Link>
 

@@ -92,7 +92,9 @@
     }
   },
   "dependencies": {
+    "@codemirror/lang-json": "0.19.2",
     "@faker-js/faker": "^7.4.0",
+    "@uiw/react-codemirror": "4.5.3",
     "bootstrap": "^5.2.0",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.7",
