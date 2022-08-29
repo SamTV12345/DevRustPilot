@@ -12,7 +12,6 @@ import { Provider } from 'react-redux';
 import { store } from './store/store';
 import { UTFConverter } from './converter/UTFConverter';
 
-
 export default function App() {
   return (
     <Provider store={store}>
