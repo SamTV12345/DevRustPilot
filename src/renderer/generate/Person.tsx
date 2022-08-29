@@ -3,14 +3,17 @@ import { useEffect, useState } from 'react';
 import { GenButton } from './GenButton';
 import { Clipboard } from './Clipboard';
 import { exec } from '../utils/ExecUtils';
-import { EMAIL_PREFIX, EMAIL_SUFFIX, SETTINGS_CALLBACK } from '../constants/SettingsConstants';
+import { EMAIL_PREFIX, EMAIL_SUFFIX } from '../constants/SettingsConstants';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { modifyEmail, modifyEmailPrefix, modifyEmailSuffix, modifyFirstname, modifyLastname } from './PersonSlice';
 
 export const Person = () => {
-  const [firstname, setFirstname] = useState<string>('')
-  const [lastname, setLastname] = useState<string>('')
-  const [email, setEmail] = useState<string>('')
-  const [emailPrefix, setEmailPrefix] = useState<string>('')
-  const [emailSuffix, setEmailSuffix] = useState<string>('')
+  const dispatch = useAppDispatch()
+  const firstname = useAppSelector(state => state.personReducer.firstname)
+  const lastname = useAppSelector(state=>state.personReducer.lastname)
+  const email = useAppSelector(state=>state.personReducer.email)
+  const emailPrefix = useAppSelector(state=>state.personReducer.emailPrefix)
+  const emailSuffix = useAppSelector(state=>state.personReducer.emailSuffix)
 
   useEffect(()=>{
     exec(EMAIL_PREFIX, 'person-callback')
@@ -19,7 +22,7 @@ export const Person = () => {
 
   useEffect(()=>{
     if(firstname.length>0 || lastname.length>0) {
-      setEmail(emailPrefix + "+" + firstname + lastname + "@" + emailSuffix)
+      dispatch(modifyEmail(emailPrefix + "+" + firstname + lastname + "@" + emailSuffix))
     }
     }, [firstname, lastname])
 
@@ -29,12 +32,13 @@ export const Person = () => {
     const val = args[1]
     switch (key){
       case EMAIL_PREFIX:
-        setEmailPrefix(val)
+        dispatch(modifyEmailPrefix(val))
         break
       case EMAIL_SUFFIX:
-        setEmailSuffix(val)
+        dispatch(modifyEmailSuffix(val))
         break
     }
+    dispatch(modifyEmail(emailPrefix + "+" + firstname + lastname + "@" + emailSuffix))
   })
     return ()=>{
     window.electron.ipcRenderer.removeAllListeners(['person-callback'])
@@ -47,7 +51,7 @@ export const Person = () => {
         Vorname
       </div>
       <input className='col-7' disabled={true} value={firstname} />
-      <GenButton func={() => setFirstname(faker.name.firstName())} classNames={'col-1 ms-2'} />
+      <GenButton func={() => dispatch(modifyFirstname((faker.name.firstName())))} classNames={'col-1 ms-2'} />
       <Clipboard thingToClip={firstname} classNames={'col-1 ms-2'} />
     </div>
     <div className='row mb-3'>
@@ -55,7 +59,7 @@ export const Person = () => {
           Nachname
         </div>
         <input className='col-7' disabled={true} value={lastname} />
-        <GenButton func={() => setLastname(faker.name.lastName())} classNames={'col-1 ms-2'} />
+        <GenButton func={() => dispatch(modifyLastname((faker.name.lastName())))} classNames={'col-1 ms-2'} />
         <Clipboard thingToClip={lastname} classNames={'col-1 ms-2'} />
     </div>
     <div className='row mb-3'>

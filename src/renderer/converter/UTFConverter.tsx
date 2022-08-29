@@ -1,9 +1,11 @@
-import { useState } from 'react';
 import { Button } from 'react-bootstrap';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { modifyInput, modifyOutput } from './UTFConverterSlice';
 
 export const UTFConverter = () => {
-  const [input, setInput] = useState<string>('');
-  const [output, setOutput] = useState<string>('');
+  const input = useAppSelector(state=>state.utfReducer.input)
+  const output = useAppSelector(state=>state.utfReducer.output)
+  const dispatch = useAppDispatch()
 
   const isASCII = (string: string) => {
     return string.charCodeAt(0) < 127;
@@ -26,7 +28,7 @@ export const UTFConverter = () => {
         resultingString += "\\u"+curStringToAdd
       }
     }
-    setOutput(resultingString);
+    dispatch(modifyOutput((resultingString)))
     // @ts-ignore
     window.electron.ipcRenderer.sendMessage('clipboard', resultingString);
   };
@@ -38,7 +40,7 @@ export const UTFConverter = () => {
         <input
           value={input}
           className="m-2 w-100"
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => dispatch(modifyInput(e.target.value))}
         />
         <Button className="m-2 w-100" onClick={() => convert(input)}>
           Umwandeln
