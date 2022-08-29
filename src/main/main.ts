@@ -22,14 +22,32 @@ class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
     autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
+    autoUpdater.allowDowngrade = true
+    autoUpdater.autoDownload = false
+    autoUpdater.checkForUpdates()
   }
 }
+
+autoUpdater.on('update-available', () => {
+  console.log("Update verfügbar")
+  store.set("current","update verfügbar")
+  autoUpdater.downloadUpdate()
+})
+
+autoUpdater.on('update-downloaded', () => {
+  store.set("current2","Downloading")
+  autoUpdater.quitAndInstall(true);
+})
 
 let mainWindow: BrowserWindow | null = null;
 
 const store = new Store();
 
+Object.defineProperty(app, 'isPackaged', {
+  get() {
+    return true;
+  }
+});
 
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
