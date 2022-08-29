@@ -8,6 +8,12 @@
     "email": "electronreactboilerplate@gmail.com",
     "url": "https://github.com/electron-react-boilerplate"
   },
+  "build": {
+    "publish": [{
+      "provider": "github",
+      "owner": "SamTV12345",
+      "repo": "ElectronUtils"
+    }],
   "main": "./dist/main/main.js",
   "scripts": {
     "electron-rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",
