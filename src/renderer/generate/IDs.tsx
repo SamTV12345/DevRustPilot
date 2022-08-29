@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { AES, MD5, SHA256, SHA512 } from 'jscrypto';
 
 export const IDs = ()=>{
-    const [generatedInteger, setGeneratedInteger] = useState<number>()
+  const [generatedInteger, setGeneratedInteger] = useState<number>()
   const [generatedIntegerPositive, setPositiveIntegerPositive] = useState<number>()
   const [generatedUUID, setGeneratedUUID] = useState<string>()
 

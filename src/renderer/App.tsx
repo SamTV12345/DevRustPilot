@@ -6,14 +6,16 @@ import { WSL } from "./WSL";
 import { Person } from './generate/Person';
 import { SettingsMenu } from './Settings';
 import { IDs } from './generate/IDs';
-import { UTFConverter } from './UTFConverter';
 import { JsonViewer } from './jwt/JsonViewer';
 import { Alert } from './alerts/Alert';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
+import { UTFConverter } from './converter/UTFConverter';
 
 
 export default function App() {
   return (
-    <>
+    <Provider store={store}>
       <Alert/>
       <Router basename="/">
         <BasicExample/>
@@ -28,6 +30,6 @@ export default function App() {
           <Route path="/jwt" element={<JsonViewer/>}/>
         </Routes>
       </Router>
-    </>
+    </Provider>
   );
 }
