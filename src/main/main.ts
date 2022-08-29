@@ -43,12 +43,6 @@ let mainWindow: BrowserWindow | null = null;
 
 const store = new Store();
 
-Object.defineProperty(app, 'isPackaged', {
-  get() {
-    return true;
-  }
-});
-
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   event.reply('ipc-example', msgTemplate('pong'));
