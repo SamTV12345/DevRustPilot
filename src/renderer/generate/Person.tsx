@@ -74,7 +74,7 @@ export const Person = () => {
         Zweifaktor-Email
       </div>
       <input className='col-7' disabled={true} value={emailPrefix+"@"+emailSuffix} />
-      <Clipboard thingToClip={email} classNames={'col-1 ms-2'} />
+      <Clipboard thingToClip={emailPrefix+"@"+emailSuffix} classNames={'col-1 ms-2'} />
     </div>
 
   </div>
