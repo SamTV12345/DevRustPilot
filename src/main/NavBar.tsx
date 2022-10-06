@@ -23,6 +23,12 @@ export function BasicExample() {
               <NavDropdown.Item onClick={() => navigate('/generate/ids')}>IDs</NavDropdown.Item>
               <NavDropdown.Item onClick={() => navigate('/jwt')}>JWT</NavDropdown.Item>
             </NavDropdown>
+            <NavDropdown title="Docker" id="docker-dropdown">
+              <NavDropdown.Item onClick={() => navigate('/docker/images')}>Images</NavDropdown.Item>
+              <NavDropdown.Item onClick={() => navigate('/docker/containers')}>Containers</NavDropdown.Item>
+            </NavDropdown>
+
+            <Nav.Link onClick={()=>navigate('/docker')}></Nav.Link>
             <Nav.Link onClick={() => navigate('/settings')}>Einstellungen</Nav.Link>
 
           </Nav>
