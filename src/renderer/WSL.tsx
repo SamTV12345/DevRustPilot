@@ -17,6 +17,7 @@ export const WSL = () => {
 
   useEffect(()=>{
     exec(STARTUP_SCRIPT, 'wsl-callback')
+    runCommand('wsl --list --verbose')
   }, [])
 
 

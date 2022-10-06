@@ -183,6 +183,7 @@ app.on('window-all-closed', () => {
   }
 });
 
+app.commandLine.appendSwitch('force_high_performance_gpu')
 app
   .whenReady()
   .then(() => {
