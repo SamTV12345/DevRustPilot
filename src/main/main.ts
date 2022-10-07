@@ -18,6 +18,8 @@ import { clipboard } from 'electron'
 import {exec} from 'child_process'
 import Store from 'electron-store'
 
+
+const currentPlatform = process.platform
 class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
@@ -62,6 +64,22 @@ ipcMain.on('cmd', async (event, arg)=>{
 // call the function
   execute(arg, (output) => {
     event.sender.send('cmd-callback',output)
+  });
+})
+
+ipcMain.on('unix-cmd', async (event, arg)=>{
+  const execute = (command, callback)=>{
+    exec(command, (error, stdout, stderr) => {
+      callback(stdout);
+    });
+  };
+
+  if (currentPlatform === 'win32'){
+    arg[0] = 'wsl '+arg[0]
+  }
+// call the function
+  execute(arg[0], (output) => {
+    event.sender.send(arg[1],output)
   });
 })
 
