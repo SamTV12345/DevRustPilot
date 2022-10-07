@@ -8,7 +8,7 @@ export const Alert = ()=>{
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
 
-  return <Modal show={show} onHide={handleClose}>
+  return <Modal show={false} onHide={handleClose}>
     <Modal.Header closeButton>
       <Modal.Title>Modal heading</Modal.Title>
     </Modal.Header>

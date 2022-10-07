@@ -12,6 +12,7 @@ import { Provider } from 'react-redux';
 import { store } from './store/store';
 import { UTFConverter } from './converter/UTFConverter';
 import { ImageView } from './docker/ImageView';
+import { HistoryDocker } from './docker/HistoryDocker';
 
 export default function App() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/settings" element={<SettingsMenu/>}/>
           <Route path="/jwt" element={<JsonViewer/>}/>
           <Route path="/docker/images" element={<ImageView/>}/>
+          <Route path="/docker/history" element={<HistoryDocker/>}/>
         </Routes>
       </Router>
     </Provider>
