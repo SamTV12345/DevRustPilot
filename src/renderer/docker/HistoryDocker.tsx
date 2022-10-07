@@ -58,7 +58,7 @@ export const HistoryDocker = () => {
   return <div className='pe-5 ps-5 pt-5'>
     <div className='row'>
       <h2 className="col-6">{imageName}</h2>
-      <h2 className="col-3">Size: {prettyBytes(Number(currentImage?.Size))}</h2>
+      <h2 className="col-3">Size: {currentImage?.Size && prettyBytes(Number(currentImage?.Size))}</h2>
       <h2 className="col-3">Created: {currentImage&&timeago(Number(currentImage?.Created)*1000)}</h2>
       <Table className='col h-75'>
         <thead>
