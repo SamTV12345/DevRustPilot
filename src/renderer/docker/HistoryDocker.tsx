@@ -20,7 +20,7 @@ export const HistoryDocker = () => {
 
   useEffect(() => {
     window.electron.ipcRenderer.on('image-history', (args) => {
-      setHistoryItems(JSON.parse(args) as DockerHistoryItem[]);
+      setHistoryItems(JSON.parse(args as string) as DockerHistoryItem[]);
     });
     setCurrentImage(images.find(i=>i.Id.includes(navigate.state.id)))
     getImageHistory();

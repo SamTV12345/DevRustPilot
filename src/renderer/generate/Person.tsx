@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { GenButton } from './GenButton';
 import { Clipboard } from './Clipboard';
 import { exec } from '../utils/ExecUtils';
@@ -28,8 +28,9 @@ export const Person = () => {
 
   useEffect(()=>{
   window.electron.ipcRenderer.on('person-callback', (args)=>{
-    const key = args[0]
-    const val = args[1]
+    const res = args as string[]
+    const key = res[0]
+    const val = res[1]
     switch (key){
       case EMAIL_PREFIX:
         dispatch(modifyEmailPrefix(val))

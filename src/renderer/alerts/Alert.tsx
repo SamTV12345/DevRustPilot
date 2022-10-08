@@ -1,26 +1,38 @@
-import { Button, Modal } from "react-bootstrap"
-import { useState } from 'react';
+import { Toast, ToastContainer } from 'react-bootstrap';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { setMessage, setShowAlert, setType } from './AlertReducer';
+import { useEffect } from 'react';
+import { PullResponse } from '../docker/PullResponse';
 
 
 export const Alert = ()=>{
-  const [show, setShow] = useState(false)
+  const dispatch = useAppDispatch()
+  const show = useAppSelector(state=>state.alertReducer.show)
+  const message = useAppSelector(state=>state.alertReducer.message)
+  const type = useAppSelector(state=>state.alertReducer.type)
 
-  const handleClose = () => setShow(false)
-  const handleShow = () => setShow(true)
+  useEffect(()=>{
+    window.electron.ipcRenderer.on('alert-update', (args) => {
+      const res = args as string
+      const begin = res.lastIndexOf('{')
+      const end = res.lastIndexOf('}')
+      const resultingJSONObject = JSON.parse(res.substring(begin, end+1)) as PullResponse
+      const type = resultingJSONObject.message?'error':'info'
 
-  return <Modal show={false} onHide={handleClose}>
-    <Modal.Header closeButton>
-      <Modal.Title>Modal heading</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-    <Modal.Footer>
-      <Button variant="secondary" onClick={handleClose}>
-        Close
-      </Button>
-      <Button variant="primary" onClick={handleClose}>
-        Save Changes
-      </Button>
-    </Modal.Footer>
-  </Modal>
+      // @ts-ignore
+      for (const [key,value] of Object.entries(resultingJSONObject)) {
+        dispatch(setMessage(value))
+      }
+      dispatch(setType(type))
+      dispatch(setShowAlert(true))
+    });
+    return ()=>window.electron.ipcRenderer.removeAllListeners(['alert-update'])
+  },[])
+
+  return <ToastContainer position={'bottom-center'} className="p-3">
+    <Toast style={{zIndex: 50, bottom: 20}} className={`${type==='error'?'bg-danger':'bg-success'}`} show={show} onClose={()=>dispatch(setShowAlert(false))} delay={3000} autohide>
+    <Toast.Body className={'text-white'}>{message}</Toast.Body>
+  </Toast>
+  </ToastContainer>
 }
 

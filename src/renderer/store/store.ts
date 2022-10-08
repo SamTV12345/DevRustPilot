@@ -3,13 +3,15 @@ import { jwtReducer } from '../jwt/JWTReducer';
 import { utfReducer } from '../converter/UTFConverterSlice';
 import { personReducer } from '../generate/PersonSlice';
 import { dockerReducer } from '../docker/DockerSlice';
+import { alertReducer } from '../alerts/AlertReducer';
 
 export let store = configureStore({
   reducer: {
     jwt: jwtReducer,
     utfReducer: utfReducer,
     personReducer: personReducer,
-    dockerReducer
+    dockerReducer,
+    alertReducer
   },
 })
 

@@ -15,7 +15,7 @@ export const ImageView = ()=>{
 
   useEffect(()=>{
     window.electron.ipcRenderer.on('image-callback', (args) => {
-      const res = JSON.parse(args) as ImageModel[]
+      const res = JSON.parse(args as string) as ImageModel[]
       dispatch(setImages(res))
     })
     getImages()
@@ -29,6 +29,49 @@ export const ImageView = ()=>{
       ["curl --unix-socket /var/run/docker.sock http://localhost/images/json?all=true", 'image-callback']);
   }
 
+  const performPull = (id: string)=>{
+    const foundImage = images.find(i=>i.Id.includes(id))
+    if(foundImage) {
+      const { imageTag, imageName } = determineImageProps(foundImage)
+      window.electron.ipcRenderer.sendMessage('unix-cmd',
+        [`curl -X POST --unix-socket /var/run/docker.sock localhost/images/create?fromImage=${encodeURI(imageName)}:${imageTag}`,
+          'alert-update'])
+    }
+  }
+
+
+  const deleteImage = (id: string)=>{
+    const foundImage = images.find(i=>i.Id.includes(id))
+    if(foundImage) {
+      let { imageTag, imageName } = determineImageProps(foundImage)
+      imageTag = ':'+imageTag
+      if (imageTag.includes('none')){
+        imageTag = ''
+        imageName=id
+      }
+      window.electron.ipcRenderer.sendMessage('unix-cmd',
+        [`curl -X DELETE --unix-socket /var/run/docker.sock localhost/images/${imageName+imageTag}`,
+          'alert-update'])
+    }
+  }
+
+  function determineImageProps(i: ImageModel) {
+    let imageName = '';
+    let imageTag = '';
+    let imageId = i.Id.substring(7, 19);
+    if (i.RepoTags) {
+      const imageNameAndTag = i.RepoTags[0].split(':');
+      imageName = imageNameAndTag[0];
+      imageTag = imageNameAndTag[1];
+    } else {
+      imageTag = '<none>';
+    }
+
+    if (i.RepoDigests) {
+      imageName = i.RepoDigests[0].split('@')[0];
+    }
+    return { imageName, imageTag, imageId };
+  }
 
   return     <div className="h-75 d-flex justify-content-center align-items-center">
     <div className="w-75">
@@ -48,22 +91,8 @@ export const ImageView = ()=>{
       </tr>
       </thead>
       <tbody>
-      {images.length>0&& images.map(i=>{
-        let imageName = ''
-        let imageTag = ''
-        let imageId = i.Id.substring(7,19)
-        if(i.RepoTags) {
-          const imageNameAndTag = i.RepoTags[0].split(':')
-          imageName = imageNameAndTag[0]
-          imageTag = imageNameAndTag[1]
-        }
-        else{
-          imageTag = '<none>'
-        }
-
-        if(i.RepoDigests){
-            imageName = i.RepoDigests[0].split('@')[0]
-        }
+      {images && images.length>0&& images.map(i=>{
+        let { imageName, imageTag, imageId } = determineImageProps(i);
 
         // @ts-ignore
         return <tr key={i.Id}>
@@ -91,9 +120,9 @@ export const ImageView = ()=>{
             </Dropdown.Toggle>
             <Dropdown.Menu>
               <Dropdown.Item onClick={()=>navigate('/docker/history', {state: { id:imageId}})}>Inspect</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Pull</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Push To Hub</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Remove</Dropdown.Item>
+              <Dropdown.Item onClick={()=>performPull(imageId)} disabled={imageTag.includes('none')}>Pull</Dropdown.Item>
+              <Dropdown.Item href="#/action-3" disabled={imageTag.includes('none')}>Push To Hub</Dropdown.Item>
+              <Dropdown.Item onClick={()=>deleteImage(imageId)}>Remove</Dropdown.Item>
             </Dropdown.Menu>
             </Dropdown>
           </td>

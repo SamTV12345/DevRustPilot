@@ -62,15 +62,15 @@ ipcMain.on('cmd', async (event, arg)=>{
   };
 
 // call the function
-  execute(arg, (output) => {
+  execute(arg, (output:string) => {
     event.sender.send('cmd-callback',output)
   });
 })
 
 ipcMain.on('unix-cmd', async (event, arg)=>{
-  const execute = (command, callback)=>{
-    exec(command, (error, stdout, stderr) => {
-      callback(stdout);
+  const execute = (command:string, callback: any)=>{
+    exec(command, (_error, stdout) => {
+        callback(stdout)
     });
   };
 
@@ -78,8 +78,13 @@ ipcMain.on('unix-cmd', async (event, arg)=>{
     arg[0] = 'wsl '+arg[0]
   }
 // call the function
-  execute(arg[0], (output) => {
-    event.sender.send(arg[1],output)
+  execute(arg[0], (output:any) => {
+    if(arg[1] === 'alert-update'){
+      event.sender.send('alert-update', output)
+    }
+    else {
+      event.sender.send(arg[1], output)
+    }
   });
 })
 
