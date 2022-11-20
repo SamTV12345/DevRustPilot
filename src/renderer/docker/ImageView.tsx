@@ -39,6 +39,16 @@ export const ImageView = ()=>{
     }
   }
 
+  const performPush = (id: string)=>{
+    const foundImage = images.find(i=>i.Id.includes(id))
+    if(foundImage) {
+      const { imageTag, imageName } = determineImageProps(foundImage)
+      window.electron.ipcRenderer.sendMessage('unix-cmd',
+        [`curl -X POST --unix-socket /var/run/docker.sock localhost/images/create?fromImage=${encodeURI(imageName)}:${imageTag}`,
+          'alert-update'])
+    }
+  }
+
 
   const deleteImage = (id: string)=>{
     const foundImage = images.find(i=>i.Id.includes(id))
@@ -55,7 +65,7 @@ export const ImageView = ()=>{
     }
   }
 
-  function determineImageProps(i: ImageModel) {
+  const determineImageProps=(i: ImageModel)=> {
     let imageName = '';
     let imageTag = '';
     let imageId = i.Id.substring(7, 19);
@@ -76,7 +86,6 @@ export const ImageView = ()=>{
   return     <div className="h-75 d-flex justify-content-center align-items-center">
     <div className="w-75">
     <span><h1 className="d-inline">Docker Images</h1></span>
-
     <ArrowClockwise className="ms-2 mb-2 h2" onClick={()=>getImages()} />
 
     <Table className="">
@@ -94,7 +103,6 @@ export const ImageView = ()=>{
       {images && images.length>0&& images.map(i=>{
         let { imageName, imageTag, imageId } = determineImageProps(i);
 
-        // @ts-ignore
         return <tr key={i.Id}>
           <td>
             {imageName}
@@ -121,7 +129,7 @@ export const ImageView = ()=>{
             <Dropdown.Menu>
               <Dropdown.Item onClick={()=>navigate('/docker/history', {state: { id:imageId}})}>Inspect</Dropdown.Item>
               <Dropdown.Item onClick={()=>performPull(imageId)} disabled={imageTag.includes('none')}>Pull</Dropdown.Item>
-              <Dropdown.Item href="#/action-3" disabled={imageTag.includes('none')}>Push To Hub</Dropdown.Item>
+              <Dropdown.Item onClick={()=>performPush(imageId)} disabled={imageTag.includes('none')}>Push To Hub</Dropdown.Item>
               <Dropdown.Item onClick={()=>deleteImage(imageId)}>Remove</Dropdown.Item>
             </Dropdown.Menu>
             </Dropdown>
