@@ -9,14 +9,9 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
-import { autoUpdater } from 'electron-updater';
-import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { clipboard } from 'electron'
 import {exec} from 'child_process'
-import Store from 'electron-store'
 
 
 const currentPlatform = process.platform
