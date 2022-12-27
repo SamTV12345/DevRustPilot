@@ -2,10 +2,11 @@ import { faker } from '@faker-js/faker';
 import { useEffect } from 'react';
 import { GenButton } from './GenButton';
 import { Clipboard } from './Clipboard';
-import { exec } from '../utils/ExecUtils';
 import { EMAIL_PREFIX, EMAIL_SUFFIX } from '../constants/SettingsConstants';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { modifyEmail, modifyEmailPrefix, modifyEmailSuffix, modifyFirstname, modifyLastname } from './PersonSlice';
+import {get} from "tauri-settings";
+import {SettingsSchema} from "../Settings";
 
 export const Person = () => {
   const dispatch = useAppDispatch()
@@ -16,8 +17,12 @@ export const Person = () => {
   const emailSuffix = useAppSelector(state=>state.personReducer.emailSuffix)
 
   useEffect(()=>{
-    exec(EMAIL_PREFIX, 'person-callback')
-    exec(EMAIL_SUFFIX, 'person-callback')
+    get<SettingsSchema>(EMAIL_PREFIX)
+        .then(e=>dispatch(modifyEmailPrefix(e)))
+
+    get<SettingsSchema>(EMAIL_SUFFIX)
+        .then(e=>dispatch(modifyEmailSuffix(e)))
+
   }, [])
 
   useEffect(()=>{
@@ -25,26 +30,6 @@ export const Person = () => {
       dispatch(modifyEmail(emailPrefix + "+" + firstname + lastname + "@" + emailSuffix))
     }
     }, [firstname, lastname])
-
-  useEffect(()=>{
-  window.electron.ipcRenderer.on('person-callback', (args)=>{
-    const res = args as string[]
-    const key = res[0]
-    const val = res[1]
-    switch (key){
-      case EMAIL_PREFIX:
-        dispatch(modifyEmailPrefix(val))
-        break
-      case EMAIL_SUFFIX:
-        dispatch(modifyEmailSuffix(val))
-        break
-    }
-    dispatch(modifyEmail(emailPrefix + "+" + firstname + lastname + "@" + emailSuffix))
-  })
-    return ()=>{
-    window.electron.ipcRenderer.removeAllListeners(['person-callback'])
-    }
-  }, [])
 
   return <div className="h-75 d-flex justify-content-center align-items-center"><div className='container p-4'>
     <div className='row mb-3'>

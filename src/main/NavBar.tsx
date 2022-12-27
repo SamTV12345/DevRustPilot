@@ -4,7 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { useNavigate } from 'react-router-dom';
 
-export function BasicExample() {
+export function NavBar() {
   const navigate = useNavigate();
   return (
     <Navbar bg="light" expand="lg">

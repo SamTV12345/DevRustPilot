@@ -11,7 +11,58 @@
   },
   "tauri": {
     "allowlist": {
-      "all": true
+      "shell": {
+        "scope": [{
+          "name": "ls",
+          "cmd": "ls",
+          "args": false
+        },
+          {
+            "name": "wsl-list",
+            "cmd": "wsl",
+            "args": [
+              "--list", "--verbose"
+            ]
+          },
+          {
+            "name": "start-wsl",
+            "cmd": "wsl"
+          },
+          {
+            "name":"execute-in-wsl",
+            "cmd": "wsl",
+            "args": [
+              "bash", { "validator": "\\S+" }
+            ]
+          },
+          {
+            "name":"execute-directly-in-wsl",
+            "cmd": "wsl",
+            "args": [
+               { "validator": "\\S+" },{ "validator": "\\S+" },{ "validator": "\\S+" },{ "validator": "\\S+" }
+            ]
+          }
+        ],
+        "all": true,
+        "execute": true,
+        "sidecar": true,
+        "open": true
+      },
+      "fs": {
+        "createDir": true,
+        "readDir": true,
+        "readFile": true,
+        "writeFile": true,
+        "scope": ["$APPCONFIG", "$APPCONFIG/*"]
+      },
+      "path": {
+        "all": true
+      },
+      "clipboard": {
+        "all": true,
+        "writeText": true,
+        "readText": true
+      }
     },
     "bundle": {
       "active": true,
@@ -28,7 +79,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "com.samtv12345.dev",
       "longDescription": "",
       "macOS": {
         "entitlements": null,

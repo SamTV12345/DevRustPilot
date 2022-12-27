@@ -1,6 +1,7 @@
 import { Button } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { modifyInput, modifyOutput } from './UTFConverterSlice';
+import {clipboard} from "@tauri-apps/api";
 
 export const UTFConverter = () => {
   const input = useAppSelector(state=>state.utfReducer.input)
@@ -30,11 +31,11 @@ export const UTFConverter = () => {
     }
     dispatch(modifyOutput((resultingString)))
     // @ts-ignore
-    window.electron.ipcRenderer.sendMessage('clipboard', resultingString);
+    clipboard.writeText(resultingString)
   };
 
   return (
-    <div className="h-75 d-flex justify-content-center align-items-center">
+    <div className="d-flex align-items-center justify-content-center h-75">
       <div className="h-50">
         <h1 className="card-title text-center mt-3">UTF-8 to UTF-16</h1>
         <input

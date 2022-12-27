@@ -7,35 +7,36 @@ import timeago from 'epoch-timeago';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setImages } from './DockerSlice';
+import {Command} from "@tauri-apps/api/shell";
 
 export const ImageView = ()=>{
   const images = useAppSelector(state=>state.dockerReducer.images)
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
-  useEffect(()=>{
-    window.electron.ipcRenderer.on('image-callback', (args) => {
-      const res = JSON.parse(args as string) as ImageModel[]
-      dispatch(setImages(res))
-    })
-    getImages()
-    return ()=>{
-      window.electron.ipcRenderer.removeAllListeners(['image-callback'])
-    }
-  }, [])
+  useEffect(()=>getImages(),
+      [])
 
   const getImages = ()=>{
-    window.electron.ipcRenderer.sendMessage('unix-cmd',
-      ["curl --unix-socket /var/run/docker.sock http://localhost/images/json?all=true", 'image-callback']);
+    new Command('execute-directly-in-wsl',
+      ["curl", "--unix-socket", "/var/run/docker.sock", "http://localhost/images/json?all=true"])
+        .execute()
+        .then(c=>{
+          console.log(c)
+          console.log(c.stdout)
+          const res = JSON.parse(c.stdout as string) as ImageModel[]
+
+          dispatch(setImages(res))
+        })
   }
 
   const performPull = (id: string)=>{
     const foundImage = images.find(i=>i.Id.includes(id))
     if(foundImage) {
       const { imageTag, imageName } = determineImageProps(foundImage)
-      window.electron.ipcRenderer.sendMessage('unix-cmd',
+      new Command('unix-cmd',
         [`curl -X POST --unix-socket /var/run/docker.sock localhost/images/create?fromImage=${encodeURI(imageName)}:${imageTag}`,
-          'alert-update'])
+          'alert-update']).execute()
     }
   }
 
@@ -43,9 +44,8 @@ export const ImageView = ()=>{
     const foundImage = images.find(i=>i.Id.includes(id))
     if(foundImage) {
       const { imageTag, imageName } = determineImageProps(foundImage)
-      window.electron.ipcRenderer.sendMessage('unix-cmd',
-        [`curl -X POST --unix-socket /var/run/docker.sock localhost/images/create?fromImage=${encodeURI(imageName)}:${imageTag}`,
-          'alert-update'])
+      new Command(`curl -X POST --unix-socket /var/run/docker.sock localhost/images/create?fromImage=${encodeURI(imageName)}:${imageTag}`,
+          'alert-update').execute()
     }
   }
 
@@ -59,9 +59,8 @@ export const ImageView = ()=>{
         imageTag = ''
         imageName=id
       }
-      window.electron.ipcRenderer.sendMessage('unix-cmd',
-        [`curl -X DELETE --unix-socket /var/run/docker.sock localhost/images/${imageName+imageTag}`,
-          'alert-update'])
+      new Command(`curl -X DELETE --unix-socket /var/run/docker.sock localhost/images/${imageName+imageTag}`)
+          .execute()
     }
   }
 
