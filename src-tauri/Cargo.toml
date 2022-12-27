@@ -1,6 +1,6 @@
 [package]
 name = "electron-utils"
-version = "0.0.0"
+version = "1.6.5"
 description = "A Tauri App"
 authors = ["you"]
 license = ""
