@@ -1,61 +1,48 @@
 import { Table } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import { ArrowClockwise, Play } from 'react-bootstrap-icons';
-import { exec } from './utils/ExecUtils';
 import { STARTUP_SCRIPT } from './constants/SettingsConstants';
+import {Command} from "@tauri-apps/api/shell";
+import {get} from "tauri-settings";
+import {SettingsSchema} from "./Settings";
+import {settingsManager} from "../main/settingsManager";
 
 export const WSL = () => {
   const [distroInformation, setDistroInformation] = useState<string[][]>([]);
   const [startUpScript, setStartUpScript]         = useState<string>('')
   const runCommand = (command:string) => {
-    window.electron.ipcRenderer.sendMessage('cmd', command);
-  };
+    return
+  }
 
-  const runCommandWithoutRepBack = (command:string) => {
-    window.electron.ipcRenderer.sendMessage('cmd-off', command);
-  };
+
+  function checkWSLStatus() {
+    new Command('wsl-list')
+        .execute()
+        .then(resFromCommand => {
+          const res: string[] = resFromCommand.stdout.split(/[\r\n|\n|\r]/).filter(String);
+
+          const resultingArray = res
+              .map(v => v.replace(/\u0000/g, '')) // remove all \u0000
+              .map(v => { // remove all double spaces
+                while (v.replace(/\s\s/g, ' ') != v)
+                  v = v.replace(/\s\s/g, ' ').trim();
+                return v;
+              })
+              .filter(v => v) // remove empty lines
+              .map(v => v.split(' ')); // split by space
+
+          resultingArray.forEach(res => {
+            if (res.length < 4) {
+              res.unshift("None")
+            }
+          })
+          setDistroInformation(resultingArray);
+        })
+  }
 
   useEffect(()=>{
-    exec(STARTUP_SCRIPT, 'wsl-callback')
-    runCommand('wsl --list --verbose')
+    checkWSLStatus();
   }, [])
-
-
-  useEffect(()=> {
-    window.electron.ipcRenderer.on('wsl-callback', (args) => {
-      const key = args[0]
-      const val = args[1]
-      switch (key) {
-        case STARTUP_SCRIPT:
-          setStartUpScript(val)
-      }
-    })
-
-    window.electron.ipcRenderer.on('cmd-callback', (args) => {
-      const res: string[] = args.split(/[\r\n|\n|\r]/).filter(String);
-
-      const resultingArray = res
-        .map(v => v.replace(/\u0000/g, '')) // remove all \u0000
-        .map(v => { // remove all double spaces
-          while (v.replace(/\s\s/g, ' ') != v)
-            v = v.replace(/\s\s/g, ' ').trim();
-          return v;
-        })
-        .filter(v => v) // remove empty lines
-        .map(v => v.split(' ')); // split by space
-
-      resultingArray.forEach(res => {
-        if (res.length < 4) {
-          res.unshift("None")
-        }
-      })
-      setDistroInformation(resultingArray);
-    })
-      return ()=>{
-        window.electron.ipcRenderer.removeAllListeners(['wsl-callback', 'cmd-callback'])
-      }
-    }, []
-  )
 
   const createChip = ()=>{
     return <div className="badge text-dark">
@@ -80,15 +67,30 @@ export const WSL = () => {
   }
 
 
-  return <div className="container">
-    <span><h1 className="d-inline">WSL-Infos</h1>
-      <ArrowClockwise className="ms-2 mb-2 h2" onClick={()=>runCommand('wsl --list --verbose')} />
-      <Play className="h2" onClick={()=>{
-        runCommandWithoutRepBack('wsl')
-        if(startUpScript && startUpScript.length>1){
-          runCommandWithoutRepBack('bash -c "'+startUpScript+'"')
-        }
-      }}/>
+    function sleep(milliseconds:number) {
+        return new Promise(resolve => setTimeout(resolve, milliseconds));
+    }
+
+
+    return <div className="d-flex align-items-center justify-content-center h-75">
+        <div className="position-static h-50 w-50">
+    <span><h1 className="d-inline me-5">WSL-Infos</h1>
+        <button onClick={()=>checkWSLStatus()} className="btn btn-secondary me-5" ><ArrowClockwise className=""/></button>
+      <button className="btn btn-primary"  onClick={async () => {
+          const startupScript = await settingsManager.get(STARTUP_SCRIPT)
+          new Command('start-wsl')
+
+          await sleep(4000)
+          if(startupScript==undefined|| startupScript.trim().length==0){
+              return
+          }
+          new Command('execute-in-wsl', ["bash",startupScript])
+              .execute()
+              .then(c=>console.log(c))
+          checkWSLStatus()
+      }}>
+          <Play/>
+    </button>
     </span>
 
     {distroInformation.length > 0 &&
@@ -125,5 +127,6 @@ export const WSL = () => {
         </tbody>
       </Table>
     }
-  </div>;
+  </div>
+    </div>
 };

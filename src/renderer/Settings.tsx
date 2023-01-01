@@ -1,8 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { EMAIL_PREFIX, EMAIL_SUFFIX, SETTINGS_CALLBACK, STARTUP_SCRIPT } from './constants/SettingsConstants';
-import { exec } from './utils/ExecUtils';
+import {get, set} from "tauri-settings";
+import {settingsManager} from "../main/settingsManager";
 
+export type SettingsSchema = {
+  emailprefix: string
+  emailsuffix: string
+  startupscript: string
+}
 
 export const SettingsMenu = ()=> {
   const [emailPrefix, setEmailPrefix] = useState<string>('')
@@ -10,37 +16,23 @@ export const SettingsMenu = ()=> {
   const [startupScript, setStartupScript] = useState<string>('')
 
 
-  useEffect(()=>{
-    exec(EMAIL_PREFIX, SETTINGS_CALLBACK)
-    exec(EMAIL_SUFFIX, SETTINGS_CALLBACK)
-    exec(STARTUP_SCRIPT, SETTINGS_CALLBACK)
+  useEffect(()=> {
+    settingsManager.get(EMAIL_PREFIX)
+        .then(res=>setEmailPrefix(res))
 
-    window.electron.ipcRenderer.on(SETTINGS_CALLBACK, (args)=>{
-      const key = args[0]
-      const val = args[1]
-      switch (key){
-        case EMAIL_PREFIX:
-          setEmailPrefix(val)
-          break
-        case EMAIL_SUFFIX:
-          setEmailSuffix(val)
-          break
-        case STARTUP_SCRIPT:
-          setStartupScript(val)
-      }
-    })
+    settingsManager.get(EMAIL_SUFFIX)
+        .then(res=>setEmailSuffix(res))
 
-    return ()=>{
-      window.electron.ipcRenderer.removeAllListeners([SETTINGS_CALLBACK])
-    }
-  }, [])
+    settingsManager.get(STARTUP_SCRIPT)
+        .then(res=>setStartupScript(res))
+  } ,[])
 
-
-
-  const saveConfig = ()=>{
-    window.electron.ipcRenderer.sendMessage('store-save',[EMAIL_PREFIX, emailPrefix])
-    window.electron.ipcRenderer.sendMessage('store-save',[EMAIL_SUFFIX, emailSuffix])
-    window.electron.ipcRenderer.sendMessage('store-save',[STARTUP_SCRIPT, startupScript])
+  const saveConfig = async () => {
+    await settingsManager.set(EMAIL_PREFIX, emailPrefix)
+        .then(c => console.log(c))
+    await settingsManager.set(EMAIL_SUFFIX, emailSuffix)
+        .then(c => console.log(c))
+    await settingsManager.set(STARTUP_SCRIPT, startupScript)
   }
 
   const insertGeneratePersonFields= ()=>{
@@ -58,7 +50,7 @@ export const SettingsMenu = ()=> {
         </div>
         <input className='col-6' value={emailSuffix} onChange={(v) => setEmailSuffix(v.target.value)} />
       </div>
-    </>;
+    </>
   }
 
   const insertWSLFields  = ()=>{

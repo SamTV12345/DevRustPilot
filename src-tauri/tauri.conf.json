@@ -1,0 +1,116 @@
+{
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
+    "devPath": "http://localhost:1420",
+    "distDir": "../dist"
+  },
+  "package": {
+    "productName": "electron-utils",
+    "version": "0.0.0"
+  },
+  "tauri": {
+    "allowlist": {
+      "shell": {
+        "scope": [{
+          "name": "ls",
+          "cmd": "ls",
+          "args": false
+        },
+          {
+            "name": "wsl-list",
+            "cmd": "wsl",
+            "args": [
+              "--list", "--verbose"
+            ]
+          },
+          {
+            "name": "start-wsl",
+            "cmd": "wsl"
+          },
+          {
+            "name":"execute-in-wsl",
+            "cmd": "wsl",
+            "args": [
+              "bash", { "validator": "\\S+" }
+            ]
+          },
+          {
+            "name":"execute-directly-in-wsl",
+            "cmd": "wsl",
+            "args": [
+               { "validator": "\\S+" },{ "validator": "\\S+" },{ "validator": "\\S+" },{ "validator": "\\S+" }
+            ]
+          }
+        ],
+        "all": true,
+        "execute": true,
+        "sidecar": true,
+        "open": true
+      },
+      "fs": {
+        "createDir": true,
+        "readDir": true,
+        "readFile": true,
+        "writeFile": true,
+        "scope": ["$APPCONFIG", "$APPCONFIG/*"]
+      },
+      "path": {
+        "all": true
+      },
+      "clipboard": {
+        "all": true,
+        "writeText": true,
+        "readText": true
+      }
+    },
+    "bundle": {
+      "active": true,
+      "category": "DeveloperTool",
+      "copyright": "",
+      "deb": {
+        "depends": []
+      },
+      "externalBin": [],
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "identifier": "com.samtv12345.dev",
+      "longDescription": "",
+      "macOS": {
+        "entitlements": null,
+        "exceptionDomain": "",
+        "frameworks": [],
+        "providerShortName": null,
+        "signingIdentity": null
+      },
+      "resources": [],
+      "shortDescription": "",
+      "targets": "all",
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      }
+    },
+    "security": {
+      "csp": null
+    },
+    "updater": {
+      "active": false
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "height": 600,
+        "resizable": true,
+        "title": "electron-utils",
+        "width": 800
+      }
+    ]
+  }
+}

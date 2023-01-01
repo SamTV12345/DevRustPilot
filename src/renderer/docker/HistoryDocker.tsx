@@ -9,6 +9,7 @@ import timeago from 'epoch-timeago';
 import prettyBytes from 'pretty-bytes';
 import { useAppSelector } from '../store/hooks';
 import { ImageModel } from './ImageModel';
+import {Command} from "@tauri-apps/api/shell";
 
 export const HistoryDocker = () => {
   const navigate = useLocation();
@@ -18,20 +19,14 @@ export const HistoryDocker = () => {
   const [currentImage, setCurrentImage] = useState<ImageModel>()
   const [imageName, setImageName]       = useState<string>('')
 
-  useEffect(() => {
-    window.electron.ipcRenderer.on('image-history', (args) => {
-      setHistoryItems(JSON.parse(args as string) as DockerHistoryItem[]);
-    });
+  useEffect(()=> {
     setCurrentImage(images.find(i=>i.Id.includes(navigate.state.id)))
-    getImageHistory();
+    getImageHistory()
+  }, [])
 
-
-    return () => {
-      window.electron.ipcRenderer.removeAllListeners(['image-history']);
-    };
-  }, []);
 
   useEffect(()=>{
+
     if(currentImage!==undefined){
       extractImageName()
     }
@@ -51,8 +46,9 @@ export const HistoryDocker = () => {
   }
 
   const getImageHistory = () => {
-    window.electron.ipcRenderer.sendMessage('unix-cmd',
-      [`curl --unix-socket /var/run/docker.sock http://localhost/images/${navigate.state.id}/history`, 'image-history']);
+    new Command('execute-directly-in-wsl',["curl", "--unix-socket",  "/var/run/docker.sock", `http://localhost/images/${navigate.state.id}/history`])
+        .execute()
+        .then((c)=>setHistoryItems(JSON.parse(c.stdout as string) as DockerHistoryItem[]))
   };
 
   return <div className='pe-5 ps-5 pt-5'>

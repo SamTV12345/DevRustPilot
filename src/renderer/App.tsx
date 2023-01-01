@@ -1,5 +1,5 @@
 import { MemoryRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { BasicExample } from '../main/NavBar';
+import { NavBar } from '../main/NavBar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Home } from '../main/Home';
 import { WSL } from "./WSL";
@@ -19,7 +19,7 @@ export default function App() {
     <Provider store={store}>
       <Alert/>
       <Router basename="/">
-        <BasicExample/>
+        <NavBar/>
         <Routes>
           <Route path="/" element={<Navigate to={"/home"}/>} />
             <Route path="/home" element={<Home/>} />
