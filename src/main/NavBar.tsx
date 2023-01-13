@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 export function NavBar() {
   const navigate = useNavigate();
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="light" expand="lg" className="d-flex">
       <Container>
         <Navbar.Brand onClick={() => navigate('/home')}>
           Electron-Utils

@@ -39,7 +39,14 @@
             "name":"execute-directly-in-wsl",
             "cmd": "wsl",
             "args": [
-               { "validator": "\\S+" },{ "validator": "\\S+" },{ "validator": "\\S+" },{ "validator": "\\S+" }
+              { "validator": ".*" },{ "validator": ".*" },{ "validator": ".*" },{ "validator": ".*" }
+            ]
+          },
+          {
+            "name":"run-docker",
+            "cmd": "wsl",
+            "args": [
+              "docker", {"validator": ".*"},{ "validator": ".*" }
             ]
           }
         ],

@@ -6,7 +6,7 @@ import { ImageModel } from './ImageModel';
 import timeago from 'epoch-timeago';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { setImages } from './DockerSlice';
+import {removeImage, setImages} from './DockerSlice';
 import {Command} from "@tauri-apps/api/shell";
 
 export const ImageView = ()=>{
@@ -22,10 +22,7 @@ export const ImageView = ()=>{
       ["curl", "--unix-socket", "/var/run/docker.sock", "http://localhost/images/json?all=true"])
         .execute()
         .then(c=>{
-          console.log(c)
-          console.log(c.stdout)
           const res = JSON.parse(c.stdout as string) as ImageModel[]
-
           dispatch(setImages(res))
         })
   }
@@ -44,8 +41,7 @@ export const ImageView = ()=>{
     const foundImage = images.find(i=>i.Id.includes(id))
     if(foundImage) {
       const { imageTag, imageName } = determineImageProps(foundImage)
-      new Command(`curl -X POST --unix-socket /var/run/docker.sock localhost/images/create?fromImage=${encodeURI(imageName)}:${imageTag}`,
-          'alert-update').execute()
+      new Command("execute-in-wsl", [`curl -X POST --unix-socket /var/run/docker.sock localhost/images/create?fromImage=${encodeURI(imageName)}:${imageTag}`]).execute()
     }
   }
 
@@ -59,8 +55,12 @@ export const ImageView = ()=>{
         imageTag = ''
         imageName=id
       }
-      new Command(`curl -X DELETE --unix-socket /var/run/docker.sock localhost/images/${imageName+imageTag}`)
+      new Command("run-docker", ["docker","rmi",`${imageName+imageTag}`])
           .execute()
+          .then(c=>{
+            dispatch(removeImage(id))
+          })
+          .catch(i=>console.log(i))
     }
   }
 
@@ -82,8 +82,8 @@ export const ImageView = ()=>{
     return { imageName, imageTag, imageId };
   }
 
-  return     <div className="h-75 d-flex justify-content-center align-items-center">
-    <div className="w-75">
+  return     <div className="justify-content-center space-between align-items-center overflow-auto">
+    <div className="w-75 mx-auto">
     <span><h1 className="d-inline">Docker Images</h1></span>
     <ArrowClockwise className="ms-2 mb-2 h2" onClick={()=>getImages()} />
 
@@ -121,7 +121,7 @@ export const ImageView = ()=>{
           <td className="">
             <Dropdown className="w-50 mx-auto">
             <Dropdown.Toggle id="dropdown-basic" className="bg-transparent border-0">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" style={{width:'20%'}} className="bg-dark">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" style={{width:'20px'}} className="bg-dark">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
             </svg>
             </Dropdown.Toggle>

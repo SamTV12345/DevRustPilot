@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import { ImageModel } from './ImageModel';
 
 interface DockerProps {
@@ -15,9 +15,12 @@ const dockerSlice = createSlice({
   reducers:{
     setImages: (state, action)=>{
       state.images = action.payload
+    },
+    removeImage: (state, action:PayloadAction<string>)=>{
+      state.images = state.images.filter((image)=>!image.Id.includes(action.payload))
     }
   }
 })
 
-export const {setImages} = dockerSlice.actions
+export const {setImages, removeImage} = dockerSlice.actions
 export const dockerReducer = dockerSlice.reducer
