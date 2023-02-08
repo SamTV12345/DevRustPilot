@@ -25,6 +25,7 @@ export const AppModal = () => {
     const onSubmit = (data: any) => {
         readFile(data.iconfile[0])
             .then(c=>{
+                if(db === undefined) return
                 const id = crypto.randomUUID()
                 db.execute('INSERT INTO app (id,icon, app, path) VALUES (?,?,?,?)',
                     [id,c, data.app,data.path])
