@@ -1,35 +1,38 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+
+export enum AlertTypes {
+  ERROR, SUCESS, WARN
+}
 
 interface AlertProps {
-  type: 'info'| 'error'| 'success',
-  show: boolean,
-  message: string
+  open:boolean,
+  message: string,
+  title:string,
+  type: AlertTypes
 }
 
-const initialState: AlertProps = {
-  show: false,
-  type: 'info',
-  message: ''
+const initialState:AlertProps = {
+  open:false,
+  message:'',
+  title: '',
+  type: AlertTypes.SUCESS
 }
-
 
 export const alertSlice = createSlice({
-  name: "alertSlice",
-  initialState,
-  reducers:{
-    setShowAlert:(state, action)=>{
-      state.show = action.payload
+  name: 'alertSlice',
+  initialState: initialState,
+  reducers: {
+    setAlerting:(state, action:PayloadAction<AlertProps>)=>{
+      state.type = action.payload.type
+      state.message = action.payload.message
+      state.open = action.payload.open
+      state.title = action.payload.title
     },
-    setType: (state, action)=>{
-      state.type = action.payload
-    },
-    setMessage: (state, action)=>{
-      state.message = action.payload
+    setOpen: (state, action:PayloadAction<boolean>)=>{
+      state.open = action.payload
     }
   }
 })
 
-
-export const {setShowAlert,setType, setMessage} = alertSlice.actions
-
-export const alertReducer = alertSlice.reducer
+export const alertReducer =  alertSlice.reducer
+export const alertActions = alertSlice.actions

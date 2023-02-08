@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {removeImage, setImages} from './DockerSlice';
 import {Command} from "@tauri-apps/api/shell";
+import {CenteredBackground} from "../components/CenteredBackground";
 
 export const ImageView = ()=>{
   const images = useAppSelector(state=>state.dockerReducer.images)
@@ -82,12 +83,11 @@ export const ImageView = ()=>{
     return { imageName, imageTag, imageId };
   }
 
-  return     <div className="justify-content-center space-between align-items-center overflow-auto">
-    <div className="w-75 mx-auto">
-    <span><h1 className="d-inline">Docker Images</h1></span>
+  return     <CenteredBackground>
+    <span><h1 className="text-4xl text-center">Docker Images</h1></span>
     <ArrowClockwise className="ms-2 mb-2 h2" onClick={()=>getImages()} />
 
-    <Table className="">
+    <table className="text-sm text-left text-gray-500 dark:text-gray-400 table-fixed">
       <thead>
       <tr key="image-head">
         <td>Repository</td>
@@ -136,7 +136,6 @@ export const ImageView = ()=>{
         </tr>
       })}
       </tbody>
-    </Table>
-  </div>
-  </div>
+    </table>
+</CenteredBackground>
   }

@@ -1,18 +1,19 @@
-import {Pencil, PlayBtn, StopBtn} from "react-bootstrap-icons";
+import {Pencil, PlayBtn, Trash} from "react-bootstrap-icons";
 import {useAppDispatch, useAppSelector} from "../store/hooks";
-import {ModalActions} from "../modals/ModalSlice";
 import {useEffect} from "react";
-import {AppModalProps} from "../modals/AppModal";
 import {NativeGUIActions} from "./NativeGUISlice";
 import {db} from "../constants/Database";
 import {Command} from "@tauri-apps/api/shell";
+import {AppModalProps, setModalOpen} from "../modals/ModalSlice";
+import {CenteredBackground} from "../components/CenteredBackground";
+import {PrimaryButton} from "../components/PrimaryButton";
 
 export const NativeGUI = () => {
     const dispatch = useAppDispatch()
     const apps = useAppSelector(state=>state.nativeGUIReducer.apps)
 
     const determineStatus = (status: boolean) => {
-        return status?<span className="d-flex align-items-center">&#128994;</span>: <span className="d-flex align-items-center">&#128308;</span>
+        return status?<span className="flex align-items-center">&#128994;</span>: <span className="flex align-items-center">&#128308;</span>
     }
 
     const startApp = (app: AppModalProps) => {
@@ -36,44 +37,43 @@ export const NativeGUI = () => {
             })
     },[])
 
-    return <div className="d-grid container">
+    return <CenteredBackground>
         <div>
-            <h1>Linux GUI</h1>
-            <button onClick={()=>{
-                dispatch(ModalActions.setModal({
-                    show: true,
-                    title: "App hinzufügen",
-                    closeText: "Schließen",
-                    acceptText: "Akzeptieren",
-                }))
-            }}>+</button>
-            <div id="appArea" className="flex-row d-flex gap-5">
+            <h1 className="text-center text-4xl">Linux GUI</h1>
+            <PrimaryButton onClick={()=>{
+                dispatch(setModalOpen(true))
+            }}>+</PrimaryButton>
+            <div id="appArea" className="grid grid-cols-3 gap-5">
                 {apps.map((app, index)=>{
 
 
-                return <div key={app.id}>
-                    <div className="card-header d-flex">
-                        <h2>{app.app}</h2> {determineStatus(app.status)}
-                    </div>
-                    <div className="card-body flex-column d-flex">
-                        <img src={app.icon} className="img-size" alt={app.app}/>
-                        <div>
-                        <Pencil className="icon-width pointer" onClick={()=>{
-                            dispatch(ModalActions.setModal({
-                                show: true,
-                                title: "App bearbeiten",
-                                closeText: "Schließen",
-                                acceptText: "Akzeptieren",
-                            }))
-                        }}/>
-                        <PlayBtn className="icon-width pointer" onClick={()=>{
-                            startApp(app)
-                        }}/>
+                return <div key={app.id}
+                    className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 grid grid-rows-[min-content_1fr]">
+                    <img src={app.icon} className="rounded-t-lg object-cover" alt={app.app}/>
+                    <div className="p-5 grid grid-rows-[min-content_1fr]">
+                        <div className="flex"><h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{app.app}</h5> {determineStatus(app.status)}</div>
+
+
+                        <div className="grid grid-cols-3">
+                            <div className="grid justify-center place-items-end">
+                                <Pencil className="icon-width pointer text-4xl text-blue-600" onClick={()=>{
+                                    dispatch(setModalOpen(true))}}/>
+                            </div>
+                            <div className="grid justify-center place-items-end">
+                                <PlayBtn className="icon-width pointer text-4xl text-green-400" onClick={()=>{
+                                    startApp(app)
+                                }}/>
+
+                            </div>
+                            <div className="grid justify-center place-items-end">
+                                <Trash className="icon-width pointer text-4xl text-red-700" onClick={()=>{
+                                }}/>
+                            </div>
                         </div>
                     </div>
                 </div>
                 })}
             </div>
     </div>
-    </div>
+    </CenteredBackground>
 }

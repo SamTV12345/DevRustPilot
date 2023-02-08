@@ -2,6 +2,8 @@ import { GenButton } from './GenButton';
 import { Clipboard } from './Clipboard';
 import { useState } from 'react';
 import { AES, MD5, SHA256, SHA512 } from 'jscrypto';
+import { CenteredBackground } from '../components/CenteredBackground';
+import { Input } from '../components/Input';
 
 export const IDs = ()=>{
   const [generatedInteger, setGeneratedInteger] = useState<number>()
@@ -57,65 +59,69 @@ export const IDs = ()=>{
     return AES.encrypt(stringToConvertToAES, keyToConvertToAES).toString()
   }
 
-  return <div className="h-75 d-flex justify-content-center align-items-center"><div className='container p-4'>
-    <div className='row mb-3'>
-      <div className='col-2'>
+  return <CenteredBackground>
+    <div className="grid grid-cols-[1fr_1fr_auto] gap-4">
+      <div>
         Integer
       </div>
-      <input className='col-7' disabled={true} value={generatedInteger} />
-      <GenButton func={() => setGeneratedInteger(getRndInteger(-2147483648,2147483647))} classNames={'col-1 ms-2'} />
-      <Clipboard thingToClip={generatedInteger? generatedInteger.toString():"0"} classNames={'col-1 ms-2'} />
-    </div>
-    <div className='row mb-3'>
-      <div className='col-2'>
+      <Input disabled={true} value={generatedInteger} />
+      <div>
+        <GenButton func={() => setGeneratedInteger(getRndInteger(-2147483648,2147483647))} classNames={'col-1 ms-2'} />
+        <Clipboard thingToClip={generatedInteger? generatedInteger.toString():"0"} classNames={'col-1 ms-2'} />
+      </div>
+      <div>
         Positive Integer
       </div>
-      <input className='col-7' disabled={true} value={generatedIntegerPositive} />
-      <GenButton func={() => setPositiveIntegerPositive(getRndInteger(0,2147483647))} classNames={'col-1 ms-2'} />
-      <Clipboard thingToClip={generatedIntegerPositive? generatedIntegerPositive.toString():"0"} classNames={'col-1 ms-2'} />
-    </div>
-    <div className='row mb-3'>
-      <div className='col-2'>
+      <Input disabled={true} value={generatedIntegerPositive} />
+      <div>
+        <GenButton func={() => setPositiveIntegerPositive(getRndInteger(0,2147483647))} classNames={'col-1 ms-2'} />
+        <Clipboard thingToClip={generatedIntegerPositive? generatedIntegerPositive.toString():"0"} classNames={'col-1 ms-2'} />
+      </div>
+      <div>
         UUID
       </div>
-      <input className='col-7' disabled={true} value={generatedUUID} />
-      <GenButton func={() => setGeneratedUUID(generateUUID())} classNames={'col-1 ms-2'} />
-      <Clipboard thingToClip={generatedUUID? generatedUUID:""} classNames={'col-1 ms-2'} />
-    </div>
-    <div className='row mb-3'>
-      <div className='col-2'>
+      <Input disabled={true} value={generatedUUID} />
+      <div>
+        <GenButton func={() => setGeneratedUUID(generateUUID())} classNames={'col-1 ms-2'} />
+        <Clipboard thingToClip={generatedUUID? generatedUUID:""} classNames={'col-1 ms-2'} />
+      </div>
+      <div>
         SHA256
       </div>
-      <input className='col-7' value={stringToConvertToSha256} onChange={(v)=>setStringToConvertToSha256(v.currentTarget.value)}/>
-      <GenButton func={() => setSha256Hash(generateSha256())} classNames={'col-1 ms-2'} />
-      <Clipboard thingToClip={sha256Hash? sha256Hash:""} classNames={'col-1 ms-2'} />
-    </div>
-    <div className='row mb-3'>
-      <div className='col-2'>
+      <Input value={stringToConvertToSha256} onChange={(v)=>setStringToConvertToSha256(v)}/>
+      <div>
+        <GenButton func={() => setSha256Hash(generateSha256())} classNames={'col-1 ms-2'} />
+        <Clipboard thingToClip={sha256Hash? sha256Hash:""} classNames={'col-1 ms-2'} />
+      </div>
+      <div>
         MD5
       </div>
-      <input className='col-7' value={stringToConvertToMD5} onChange={(v)=>setStringToConvertToMD5(v.currentTarget.value)}/>
-      <GenButton func={() => setMD5(generateMD5())} classNames={'col-1 ms-2'} />
-      <Clipboard thingToClip={md5? md5:""} classNames={'col-1 ms-2'} />
-    </div>
-    <div className='row mb-3'>
-      <div className='col-2'>
+      <Input value={stringToConvertToMD5} onChange={(v)=>setStringToConvertToMD5(v)}/>
+      <div>
+        <GenButton func={() => setMD5(generateMD5())} classNames={'col-1 ms-2'} />
+        <Clipboard thingToClip={md5? md5:""} classNames={'col-1 ms-2'} />
+      </div>
+
+      <div>
         SHA512
       </div>
-      <input className='col-7' value={stringToConvertToSha512} onChange={(v)=>setStringToConvertToSha512(v.currentTarget.value)}/>
+      <Input value={stringToConvertToSha512} onChange={(v)=>setStringToConvertToSha512(v)}/>
+      <div>
       <GenButton func={() => setSha512Hash(generateSha512())} classNames={'col-1 ms-2'} />
       <Clipboard thingToClip={sha512Hash? sha512Hash:""} classNames={'col-1 ms-2'} />
-    </div>
-    <div className='row mb-3'>
-      <div className='col-2'>
+      </div>
+
+      <div className="grid col-span-3 grid-cols-[1fr_1fr_1fr_auto] gap-3">
+      <div>
         AES
       </div>
-      <input className='col-3' value={stringToConvertToAES} onChange={(v)=>setStringToConvertToAES(v.currentTarget.value)}/>
-      <div className='col-1'/>
-      <input className='col-3' value={keyToConvertToAES} onChange={(v)=>setKeyToConvertToAES(v.currentTarget.value)}/>
+      <Input value={stringToConvertToAES} onChange={(v)=>setStringToConvertToAES(v)}/>
+      <Input value={keyToConvertToAES} onChange={(v)=>setKeyToConvertToAES(v)}/>
+      <div>
       <GenButton func={() => setAESHash(generateAES())} classNames={'col-1 ms-2'} />
       <Clipboard thingToClip={aesHash? aesHash:""} classNames={'col-1 ms-2'} />
+      </div>
+      </div>
     </div>
-    </div>
-  </div>
+  </CenteredBackground>
 }

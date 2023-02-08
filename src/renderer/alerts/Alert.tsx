@@ -1,20 +1,50 @@
-import { Toast, ToastContainer } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { setMessage, setShowAlert, setType } from './AlertReducer';
-import { useEffect } from 'react';
+import {alertActions, AlertTypes} from './AlertReducer';
+import {useEffect, useState} from 'react';
 import { PullResponse } from '../docker/PullResponse';
+import { createPortal } from 'react-dom';
 
 
 export const Alert = ()=>{
   const dispatch = useAppDispatch()
-  const show = useAppSelector(state=>state.alertReducer.show)
-  const message = useAppSelector(state=>state.alertReducer.message)
+  const open = useAppSelector(state=>state.alertReducer.open)
   const type = useAppSelector(state=>state.alertReducer.type)
+  const message = useAppSelector(state=>state.alertReducer.message)
+  const title = useAppSelector(state=>state.alertReducer.title)
+  const [className, setClassname] = useState<string>(`absolute bottom-10 right-10 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded`)
 
-  return <ToastContainer position={'bottom-center'} className="p-3">
-    <Toast style={{zIndex: 50, bottom: 20}} className={`${type==='error'?'bg-danger':'bg-success'}`} show={show} onClose={()=>dispatch(setShowAlert(false))} delay={3000} autohide>
-    <Toast.Body className={'text-white'}>{message}</Toast.Body>
-  </Toast>
-  </ToastContainer>
+  useEffect(()=> {
+        if(open){
+          setTimeout(()=>dispatch(alertActions.setOpen(false)),5000)
+        }
+      }, [open]
+  )
+
+  const colorSnackBarCorrect = (type: AlertTypes)=>{
+    switch (type){
+      case AlertTypes.ERROR: return 'red'
+      case AlertTypes.SUCESS: return 'green'
+      case AlertTypes.WARN:return 'orange'
+      default: return "blue"
+    }
+  }
+
+  useEffect(()=>{
+    if(className.includes('red')){
+      setClassname(className.replaceAll('red', colorSnackBarCorrect(type)))
+    } else if (className.includes('green')){
+      setClassname(className.replaceAll('green', colorSnackBarCorrect(type)))
+    } else if (className.includes('orange')){
+      setClassname(className.replaceAll('orange', colorSnackBarCorrect(type)))
+    }
+  },[type])
+
+
+
+  return createPortal(
+      <div className={`${open ? 'md:block' : 'hidden'} ${className}`} role="alert">
+        <p className="font-bold">{title}</p>
+        <p>{message}</p>
+        <div className="hidden bg-red-100 border-red-500 text-red-700 bg-orange-100 border-orange-500 text-orange-700"/>
+      </div>, document.getElementById('alert') as Element)
 }
-
