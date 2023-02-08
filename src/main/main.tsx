@@ -15,6 +15,12 @@ import {IDs} from "../renderer/generate/IDs";
 import {JsonViewer} from "../renderer/jwt/JsonViewer";
 import {ImageView} from "../renderer/docker/ImageView";
 import {HistoryDocker} from "../renderer/docker/HistoryDocker";
+import {NativeGUI} from "../renderer/linuxgui/NativeGUI";
+import "./main.css"
+import {AppModal} from "../renderer/modals/AppModal";
+import Database from "tauri-plugin-sql-api";
+
+
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -23,6 +29,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <Alert/>
             <BrowserRouter basename="/">
                 <NavBar/>
+                <AppModal/>
                 <Routes>
                     <Route path="/" element={<Navigate to={"/home"}/>} />
                     <Route path="/home" element={<Home/>} />
@@ -34,6 +41,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                     <Route path="/jwt" element={<JsonViewer/>}/>
                     <Route path="/docker/images" element={<ImageView/>}/>
                     <Route path="/docker/history" element={<HistoryDocker/>}/>
+                    <Route path="/nativeui" element={<NativeGUI/>}/>
                 </Routes>
             </BrowserRouter>
         </Provider>

@@ -1,0 +1,21 @@
+.icon-width {
+    width: 10%;
+    height: 10%;
+    margin-right: 10px;
+}
+
+
+.card-area{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.img-size{
+    max-height: 300px;
+    min-height: 300px;
+    object-fit: cover;
+}

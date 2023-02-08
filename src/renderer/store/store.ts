@@ -4,6 +4,8 @@ import { utfReducer } from '../converter/UTFConverterSlice';
 import { personReducer } from '../generate/PersonSlice';
 import { dockerReducer } from '../docker/DockerSlice';
 import { alertReducer } from '../alerts/AlertReducer';
+import {ModalSlice} from "../modals/ModalSlice";
+import {NativeGUIReducer} from "../linuxgui/NativeGUISlice";
 
 export let store = configureStore({
   reducer: {
@@ -11,7 +13,9 @@ export let store = configureStore({
     utfReducer: utfReducer,
     personReducer: personReducer,
     dockerReducer,
-    alertReducer
+    alertReducer,
+    nativeGUIReducer: NativeGUIReducer,
+    modalReducer: ModalSlice.reducer
   },
 })
 

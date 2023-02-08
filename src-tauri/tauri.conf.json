@@ -48,6 +48,13 @@
             "args": [
               "docker", {"validator": ".*"},{ "validator": ".*" }
             ]
+          },
+          {
+            "name": "start-linux-gui",
+            "cmd": "wsl",
+            "args": [
+              {"validator": ".*"}
+            ]
           }
         ],
         "all": true,
