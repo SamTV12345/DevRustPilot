@@ -30,6 +30,7 @@ export const NativeGUI = () => {
     }
 
     useEffect(()=>{
+        if(db === undefined) return
         db.select('SELECT * FROM app')
             .then(resp=>{
                 const res = resp as AppModalProps[]
