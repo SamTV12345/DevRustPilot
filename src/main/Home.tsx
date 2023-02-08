@@ -1,6 +1,6 @@
 export const Home = () => {
   return (
-    <div className="h-75 d-flex justify-content-center align-items-center">
+      <div className="grid place-items-center h-full">
       <div>Willkommen zu den Electron Utils</div>
     </div>
   );

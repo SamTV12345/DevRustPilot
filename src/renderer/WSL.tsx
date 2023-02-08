@@ -1,10 +1,7 @@
-import { Table } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import { ArrowClockwise, Play } from 'react-bootstrap-icons';
 import { STARTUP_SCRIPT } from './constants/SettingsConstants';
 import {Command} from "@tauri-apps/api/shell";
-import {get} from "tauri-settings";
-import {SettingsSchema} from "./Settings";
 import {settingsManager} from "../main/settingsManager";
 
 export const WSL = () => {
@@ -72,9 +69,9 @@ export const WSL = () => {
     }
 
 
-    return <div className="d-flex align-items-center justify-content-center h-75">
-        <div className="position-static h-50 w-50">
-    <span><h1 className="d-inline me-5">WSL-Infos</h1>
+    return <div className="grid place-items-center h-full bg-gray-700 md:bg-white">
+        <div className="bg-gray-700 p-12 md:rounded-2xl grid gap-4 w-full md:w-auto text-white  md:w-3/5">
+    <span className="font-medium text-2xl flex gap-2"><h1 className="me-5">WSL-Infos</h1>
         <button onClick={()=>checkWSLStatus()} className="btn btn-secondary me-5" ><ArrowClockwise className=""/></button>
       <button className="btn btn-primary"  onClick={async () => {
           const startupScript = await settingsManager.get(STARTUP_SCRIPT)
@@ -94,8 +91,8 @@ export const WSL = () => {
     </span>
 
     {distroInformation.length > 0 &&
-      <Table>
-        <thead>
+      <table className="text-sm text-left text-gray-500 dark:text-gray-400 table-fixed">
+        <thead className="text-xs text-gray-700 rounded  bg-gray-50 dark:bg-gray-500 dark:text-gray-400">
         <tr>
           <th>
             {distroInformation[0][1]}
@@ -125,7 +122,7 @@ export const WSL = () => {
           })
         }
         </tbody>
-      </Table>
+      </table>
     }
   </div>
     </div>

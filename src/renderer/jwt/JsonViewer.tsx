@@ -3,6 +3,7 @@ import CodeMirror from '@uiw/react-codemirror';
 import { json } from '@codemirror/lang-json';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {modifyAlgJWT, modifyDecodedJWT, modifyParsedToken, modifyRawJWT} from './JWTReducer';
+import {CenteredBackground} from "../components/CenteredBackground";
 
 export const JsonViewer = () => {
   const dispatch = useAppDispatch()
@@ -37,26 +38,25 @@ export const JsonViewer = () => {
     decodeToText(rawJWT);
   }, [rawJWT]);
 
-  return <div style={{ height: '85%' }}>
-    <div className='row h-100 m-4'>
-      <div id='payload' className='col-6 h-100'>
-        <div className="d-flex">
-          <h2>Raw-Daten</h2>
-        </div>
-        <textarea value={rawJWT} onChange={(v) => dispatch(modifyRawJWT(v.target.value))} className='h-100 w-100' />
+  return <CenteredBackground className="md:w-11/12 md:h-4/5">
+    <div className='grid grid-cols-2 gap-4'>
+      <div id='payload' className='grid-rows-2'>
+          <h2 className="text-4xl">Raw-Daten</h2>
+          <textarea value={rawJWT} onChange={(v) => dispatch(modifyRawJWT(v.target.value))} className="h-full w-full text-black"/>
       </div>
-      <div id='encoded' className='col-6 h-100'>
-        <div className='h-25'>
-          <h2>Algorithmus-Daten</h2>
-          <CodeMirror value={alg} extensions={[json()]} onChange={(v) => dispatch(modifyAlgJWT(v))} className=' w-100'
-                      editable={false} />
+      <div id='encoded' className="grid grid-rows-2">
+        <div className="grid grid-rows-[auto_1fr] gap-4">
+          <h2 className="text-4xl">Algorithmus-Daten</h2>
+          <CodeMirror value={alg} extensions={[json()]} onChange={(v) => dispatch(modifyAlgJWT(v))}
+                      editable={false} className="text-black" />
         </div>
-        <h2>JWT-Payload</h2>
+        <div className="grid grid-rows-[auto_1fr] gap-4">
+
+        <h2 className="text-4xl">JWT-Payload</h2>
         <CodeMirror value={decodedJWT} extensions={[json()]} onChange={(v) => dispatch(modifyDecodedJWT(v))}
-                    className='h-75 w-100 overflow-scroll' editable={false}/>
+                    className='overflow-y-scroll h-64 text-black' editable={false}/>
       </div>
-      <div className="position-absolute bottom-0 end-0">
       </div>
     </div>
-  </div>
+  </CenteredBackground>
 }

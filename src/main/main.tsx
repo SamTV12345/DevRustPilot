@@ -1,8 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {Home} from './Home'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import {NavBar} from "./NavBar";
 import {Provider} from "react-redux";
 import {SettingsMenu, SettingsSchema} from "../renderer/Settings";
 import {BrowserRouter, Navigate, Route, Router, Routes} from "react-router-dom";
@@ -17,8 +15,10 @@ import {ImageView} from "../renderer/docker/ImageView";
 import {HistoryDocker} from "../renderer/docker/HistoryDocker";
 import {NativeGUI} from "../renderer/linuxgui/NativeGUI";
 import "./main.css"
-import {AppModal} from "../renderer/modals/AppModal";
-import Database from "tauri-plugin-sql-api";
+import {SideBar} from "../renderer/SideBar";
+import {Header} from "../renderer/Header";
+import {App} from "./App";
+import {AddGUIModal} from "../renderer/modals/AddGUIModal";
 
 
 
@@ -26,24 +26,9 @@ import Database from "tauri-plugin-sql-api";
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <Provider store={store}>
+            <AddGUIModal/>
             <Alert/>
-            <BrowserRouter basename="/">
-                <NavBar/>
-                <AppModal/>
-                <Routes>
-                    <Route path="/" element={<Navigate to={"/home"}/>} />
-                    <Route path="/home" element={<Home/>} />
-                    <Route path="/utf16" element={<UTFConverter />} />
-                    <Route path="/wsl" element={<WSL/>}/>
-                    <Route path="/generate/person" element={<Person/>}/>
-                    <Route path="/generate/ids" element={<IDs/>}/>
-                    <Route path="/settings" element={<SettingsMenu/>}/>
-                    <Route path="/jwt" element={<JsonViewer/>}/>
-                    <Route path="/docker/images" element={<ImageView/>}/>
-                    <Route path="/docker/history" element={<HistoryDocker/>}/>
-                    <Route path="/nativeui" element={<NativeGUI/>}/>
-                </Routes>
-            </BrowserRouter>
+            <App/>
         </Provider>
     </React.StrictMode>
 )
