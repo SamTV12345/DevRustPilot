@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 export function NavBar() {
   const navigate = useNavigate();
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="light" expand="lg" className="d-flex">
       <Container>
         <Navbar.Brand onClick={() => navigate('/home')}>
           Electron-Utils
@@ -27,10 +27,9 @@ export function NavBar() {
               <NavDropdown.Item onClick={() => navigate('/docker/images')}>Images</NavDropdown.Item>
               <NavDropdown.Item onClick={() => navigate('/docker/containers')}>Containers</NavDropdown.Item>
             </NavDropdown>
-
+            <Nav.Link onClick={() => navigate('/nativeui')}>Linux Native GUI</Nav.Link>
             <Nav.Link onClick={()=>navigate('/docker')}></Nav.Link>
             <Nav.Link onClick={() => navigate('/settings')}>Einstellungen</Nav.Link>
-
           </Nav>
         </Navbar.Collapse>
       </Container>

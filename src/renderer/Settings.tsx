@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { EMAIL_PREFIX, EMAIL_SUFFIX, SETTINGS_CALLBACK, STARTUP_SCRIPT } from './constants/SettingsConstants';
-import {get, set} from "tauri-settings";
 import {settingsManager} from "../main/settingsManager";
 
 export type SettingsSchema = {
