@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {AppModalProps} from "../modals/AppModal";
+import {AppModalProps} from "../modals/ModalSlice";
 
 type NativeGUIProps = {
     apps: AppModalProps[]
@@ -32,8 +32,18 @@ const nativeGUISlice = createSlice({
                 }
                 return app
            })
+        },
+        removeApp: (state, action:PayloadAction<string>) => {
+            state.apps = state.apps.filter(app=>app.id !== action.payload)
+        },
+        updateApp: (state, action:PayloadAction<AppModalProps>) => {
+            state.apps = state.apps.map(app=>{
+                if(app.id === action.payload.id){
+                    return action.payload
+                }
+                return app
+            })
         }
-
 }})
 
 export const NativeGUIActions = nativeGUISlice.actions

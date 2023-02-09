@@ -19,6 +19,7 @@ import {SideBar} from "../renderer/SideBar";
 import {Header} from "../renderer/Header";
 import {App} from "./App";
 import {AddGUIModal} from "../renderer/modals/AddGUIModal";
+import {UpdateGUIModal} from "../renderer/modals/UpdateGUIModal";
 
 
 
@@ -27,6 +28,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <Provider store={store}>
             <AddGUIModal/>
+            <UpdateGUIModal/>
             <Alert/>
             <App/>
         </Provider>

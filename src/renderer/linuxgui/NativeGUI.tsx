@@ -2,9 +2,9 @@ import {Pencil, PlayBtn, Trash} from "react-bootstrap-icons";
 import {useAppDispatch, useAppSelector} from "../store/hooks";
 import {useEffect} from "react";
 import {NativeGUIActions} from "./NativeGUISlice";
-import {db} from "../constants/Database";
+import {db, deleteAppFromDatabase} from "../constants/Database";
 import {Command} from "@tauri-apps/api/shell";
-import {AppModalProps, setModalOpen} from "../modals/ModalSlice";
+import {AppModalProps, setAppToUpdate, setAppToUpdateModal, setModalOpen} from "../modals/ModalSlice";
 import {CenteredBackground} from "../components/CenteredBackground";
 import {PrimaryButton} from "../components/PrimaryButton";
 
@@ -38,13 +38,13 @@ export const NativeGUI = () => {
             })
     },[])
 
-    return <CenteredBackground>
+    return <CenteredBackground className="m-10">
         <div>
             <h1 className="text-center text-4xl">Linux GUI</h1>
             <PrimaryButton onClick={()=>{
                 dispatch(setModalOpen(true))
             }}>+</PrimaryButton>
-            <div id="appArea" className="grid grid-cols-3 gap-5">
+            <div id="appArea" className="grid grid-cols-4 gap-5 mt-2">
                 {apps.map((app, index)=>{
 
 
@@ -58,7 +58,9 @@ export const NativeGUI = () => {
                         <div className="grid grid-cols-3">
                             <div className="grid justify-center place-items-end">
                                 <Pencil className="icon-width pointer text-4xl text-blue-600" onClick={()=>{
-                                    dispatch(setModalOpen(true))}}/>
+                                    dispatch(setAppToUpdate(app))
+                                    dispatch(setAppToUpdateModal(true))}}
+                                />
                             </div>
                             <div className="grid justify-center place-items-end">
                                 <PlayBtn className="icon-width pointer text-4xl text-green-400" onClick={()=>{
@@ -68,6 +70,8 @@ export const NativeGUI = () => {
                             </div>
                             <div className="grid justify-center place-items-end">
                                 <Trash className="icon-width pointer text-4xl text-red-700" onClick={()=>{
+                                    deleteAppFromDatabase(app.id)
+                                    dispatch(NativeGUIActions.removeApp(app.id))
                                 }}/>
                             </div>
                         </div>
