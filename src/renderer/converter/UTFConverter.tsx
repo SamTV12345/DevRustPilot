@@ -36,7 +36,7 @@ export const UTFConverter = () => {
   };
 
   return (
-      <CenteredBackground>
+      <CenteredBackground className="">
         <h1 className=" text-3xl text-white text-center">UTF-8 to UTF-16</h1>
         <Input  onChange={(e) => dispatch(modifyInput(e))} value={input}/>
         <PrimaryButton onClick={() => convert(input)}>
