@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {AppModalProps} from "../modals/AppModal";
+import {AppModalProps} from "../modals/ModalSlice";
 
 type NativeGUIProps = {
     apps: AppModalProps[]
