@@ -65,50 +65,50 @@ export const IDs = ()=>{
         Integer
       </div>
       <Input disabled={true} value={generatedInteger} />
-      <div>
-        <GenButton func={() => setGeneratedInteger(getRndInteger(-2147483648,2147483647))} classNames={'col-1 ms-2'} />
-        <Clipboard thingToClip={generatedInteger? generatedInteger.toString():"0"} classNames={'col-1 ms-2'} />
+      <div className="grid grid-cols-2 gap-2">
+        <GenButton func={() => setGeneratedInteger(getRndInteger(-2147483648,2147483647))} className={'col-1 ms-2'} />
+        <Clipboard thingToClip={generatedInteger? generatedInteger.toString():"0"} className={'col-1 ms-2'} />
       </div>
       <div>
         Positive Integer
       </div>
       <Input disabled={true} value={generatedIntegerPositive} />
-      <div>
-        <GenButton func={() => setPositiveIntegerPositive(getRndInteger(0,2147483647))} classNames={'col-1 ms-2'} />
-        <Clipboard thingToClip={generatedIntegerPositive? generatedIntegerPositive.toString():"0"} classNames={'col-1 ms-2'} />
+      <div className="grid grid-cols-2 gap-2">
+        <GenButton func={() => setPositiveIntegerPositive(getRndInteger(0,2147483647))} className={'col-1 ms-2'} />
+        <Clipboard thingToClip={generatedIntegerPositive? generatedIntegerPositive.toString():"0"} className={'col-1 ms-2'} />
       </div>
       <div>
         UUID
       </div>
       <Input disabled={true} value={generatedUUID} />
-      <div>
-        <GenButton func={() => setGeneratedUUID(generateUUID())} classNames={'col-1 ms-2'} />
-        <Clipboard thingToClip={generatedUUID? generatedUUID:""} classNames={'col-1 ms-2'} />
+      <div className="grid grid-cols-2 gap-2">
+        <GenButton func={() => setGeneratedUUID(generateUUID())} className={'col-1 ms-2'} />
+        <Clipboard thingToClip={generatedUUID? generatedUUID:""} className={'col-1 ms-2'} />
       </div>
       <div>
         SHA256
       </div>
       <Input value={stringToConvertToSha256} onChange={(v)=>setStringToConvertToSha256(v)}/>
-      <div>
-        <GenButton func={() => setSha256Hash(generateSha256())} classNames={'col-1 ms-2'} />
-        <Clipboard thingToClip={sha256Hash? sha256Hash:""} classNames={'col-1 ms-2'} />
+      <div className="grid grid-cols-2 gap-2">
+        <GenButton func={() => setSha256Hash(generateSha256())} className={'col-1 ms-2'} />
+        <Clipboard thingToClip={sha256Hash? sha256Hash:""} className={'col-1 ms-2'} />
       </div>
       <div>
         MD5
       </div>
       <Input value={stringToConvertToMD5} onChange={(v)=>setStringToConvertToMD5(v)}/>
-      <div>
-        <GenButton func={() => setMD5(generateMD5())} classNames={'col-1 ms-2'} />
-        <Clipboard thingToClip={md5? md5:""} classNames={'col-1 ms-2'} />
+      <div className="grid grid-cols-2 gap-2">
+        <GenButton func={() => setMD5(generateMD5())} className={'col-1 ms-2'} />
+        <Clipboard thingToClip={md5? md5:""} className={'col-1 ms-2'} />
       </div>
 
       <div>
         SHA512
       </div>
       <Input value={stringToConvertToSha512} onChange={(v)=>setStringToConvertToSha512(v)}/>
-      <div>
-      <GenButton func={() => setSha512Hash(generateSha512())} classNames={'col-1 ms-2'} />
-      <Clipboard thingToClip={sha512Hash? sha512Hash:""} classNames={'col-1 ms-2'} />
+      <div className="grid grid-cols-2 gap-2">
+      <GenButton func={() => setSha512Hash(generateSha512())} className={'col-1 ms-2'} />
+      <Clipboard thingToClip={sha512Hash? sha512Hash:""} className={'col-1 ms-2'} />
       </div>
 
       <div className="grid col-span-3 grid-cols-[1fr_1fr_1fr_auto] gap-3">
@@ -117,9 +117,9 @@ export const IDs = ()=>{
       </div>
       <Input value={stringToConvertToAES} onChange={(v)=>setStringToConvertToAES(v)}/>
       <Input value={keyToConvertToAES} onChange={(v)=>setKeyToConvertToAES(v)}/>
-      <div>
-      <GenButton func={() => setAESHash(generateAES())} classNames={'col-1 ms-2'} />
-      <Clipboard thingToClip={aesHash? aesHash:""} classNames={'col-1 ms-2'} />
+      <div className="grid grid-cols-2 gap-2">
+      <GenButton func={() => setAESHash(generateAES())} className={'col-1 ms-2'} />
+      <Clipboard thingToClip={aesHash? aesHash:""} className={'col-1 ms-2'} />
       </div>
       </div>
     </div>
