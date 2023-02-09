@@ -1,7 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { DockerHistoryItem } from './DockerHistoryItem';
-import { Table } from 'react-bootstrap';
 import './docker.css'
 // @ts-ignore
 import timeago from 'epoch-timeago';
@@ -56,7 +55,7 @@ export const HistoryDocker = () => {
       <h2 className="col-6">{imageName}</h2>
       <h2 className="col-3">Size: {currentImage?.Size && prettyBytes(Number(currentImage?.Size))}</h2>
       <h2 className="col-3">Created: {currentImage&&timeago(Number(currentImage?.Created)*1000)}</h2>
-      <Table className='col h-75'>
+      <table className='col h-75'>
         <thead>
         <tr key='history-head'>
           <td>
@@ -77,7 +76,7 @@ export const HistoryDocker = () => {
           <td>{h.Size}</td>
         </tr>)}
         </tbody>
-      </Table>
+      </table>
       <div className='col bg-light ms-5'>
         {historyItems[selectedRow]!==undefined&& historyItems[selectedRow].CreatedBy}
       </div>

@@ -40,28 +40,32 @@ export const Person = () => {
                 Vorname
             </div>
             <Input disabled={true} value={firstname}/>
-            <div>
-                <GenButton func={() => dispatch(modifyFirstname((faker.name.firstName())))} classNames={'col-1 ms-2'}/>
-                <Clipboard thingToClip={firstname} classNames={'col-1 ms-2'}/>
+            <div className="grid grid-cols-2 gap-2">
+                <GenButton func={() => dispatch(modifyFirstname((faker.name.firstName())))} className={'h-full'}/>
+                <Clipboard thingToClip={firstname} className={"h-full"}/>
             </div>
-            <div className='col-2'>
+            <div className='grid grid-cols-2 gap-2'>
                 Nachname
             </div>
             <Input className='col-7' disabled={true} value={lastname}/>
-            <div>
-                <GenButton func={() => dispatch(modifyLastname((faker.name.lastName())))} classNames={'col-1 ms-2'}/>
-                <Clipboard thingToClip={lastname} classNames={'col-1 ms-2'}/>
+            <div className="grid grid-cols-2 gap-2">
+                <GenButton func={() => dispatch(modifyLastname((faker.name.lastName())))} className={"h-full"}/>
+                <Clipboard thingToClip={lastname} className=" h-full"/>
             </div>
-            <div className='col-2'>
+            <div className='grid grid-cols-2 gap-2'>
                 E-Mail
             </div>
             <Input className='col-7' disabled={true} value={email}/>
-            <Clipboard thingToClip={email} classNames={'col-1 ms-2'}/>
+            <div className="grid grid-cols-2">
+                <Clipboard thingToClip={email} className={'col-1 ms-2'}/>
+            </div>
             <div className='col-2'>
                 Zweifaktor-Email
             </div>
             <Input className='col-7' disabled={true} value={emailPrefix + "@" + emailSuffix}/>
-            <Clipboard thingToClip={emailPrefix + "@" + emailSuffix} classNames={'col-1 ms-2'}/>
+            <div className="grid grid-cols-2">
+                <Clipboard thingToClip={emailPrefix + "@" + emailSuffix} className={'col-1 ms-2'}/>
+            </div>
     </div>
 </CenteredBackground>
 }

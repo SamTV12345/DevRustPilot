@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import {FC, useEffect, useState} from 'react';
 import { EMAIL_PREFIX, EMAIL_SUFFIX, SETTINGS_CALLBACK, STARTUP_SCRIPT } from './constants/SettingsConstants';
 import {settingsManager} from "../main/settingsManager";
+import {PrimaryButton} from "./components/PrimaryButton";
+import {CenteredBackground} from "./components/CenteredBackground";
 
 export type SettingsSchema = {
   emailprefix: string
@@ -34,43 +35,42 @@ export const SettingsMenu = ()=> {
     await settingsManager.set(STARTUP_SCRIPT, startupScript)
   }
 
-  const insertGeneratePersonFields= ()=>{
+  type PropsWithChildren= {
+
+  }
+
+  const GeneratePersonFields:FC<PropsWithChildren>= ()=>{
     return <>
-      <div className='row mb-3'>
-        <div className='col-12'><h2>Generate Person</h2></div>
+        <h2 className="text-2xl col-span-2">Generate Person</h2>
         <div className='col-6'>
           Email-Präfix
         </div>
         <input className='col-6' value={emailPrefix} onChange={(v) => setEmailPrefix(v.target.value)} />
-      </div>
-      <div className='row mb-3'>
         <div className='col-6'>
           Email-Suffix
         </div>
         <input className='col-6' value={emailSuffix} onChange={(v) => setEmailSuffix(v.target.value)} />
-      </div>
+
     </>
   }
 
-  const insertWSLFields  = ()=>{
+  const WSLFields:FC<PropsWithChildren>  = ()=>{
     return <>
-    <div className='row mb-3'>
-      <div className='col-12'><h2>WSL Fields</h2></div>
+      <h2 className="text-2xl col-span-2">WSL Fields</h2>
       <div className='col-6'>
         Startup-Script
       </div>
       <input className='col-6' value={startupScript} onChange={(v) => setStartupScript(v.target.value)} />
-    </div>
     </>
   }
 
-  return <div className='p-4 h-75 d-flex justify-content-center align-items-center'>
-    <div className="container">
-      {insertGeneratePersonFields()}
-      {insertWSLFields()}
+  return <CenteredBackground>
+    <div className="grid grid-cols-2 gap-2">
+      <GeneratePersonFields/>
+      <WSLFields/>
       <div className="d-flex justify-content-center">
-        <Button className="" onClick={saveConfig}>Speichern</Button>
+        <PrimaryButton onClick={saveConfig}>Speichern</PrimaryButton>
       </div>
     </div>
-  </div>
+  </CenteredBackground>
 }
