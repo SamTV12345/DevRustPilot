@@ -8,3 +8,21 @@ export let db:Database|undefined = undefined
             .catch(c=>console.log(c))
     })
 
+export const deleteAppFromDatabase = (id:string)=>{
+    if(!db){
+        return new Promise((resolve,reject)=>{
+            reject("Database not loaded")
+        })
+    }
+    db.execute("DELETE FROM app WHERE id=?",[id])
+}
+
+export const updateAppInDatabase = (id:string,icon:string,app:string,path:string)=>{
+    if(!db){
+        return new Promise((resolve,reject)=>{
+            reject("Database not loaded")
+        })
+    }
+    console.log(id)
+    return db.execute("UPDATE app SET icon=?,app=?,path=? WHERE id=?",[icon,app,path,id])
+}

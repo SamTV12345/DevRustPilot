@@ -11,13 +11,17 @@ export interface AppModalProps {
 // Define a type for the slice state
 interface ModalProps {
     openModal:boolean,
+    openUpdateModal: boolean,
     openAddModal: boolean,
+    appToUpdate: undefined|AppModalProps
 }
 
 // Define the initial state using that type
 const initialState: ModalProps = {
     openModal: false,
+    openUpdateModal: false,
     openAddModal: false,
+    appToUpdate: undefined
 }
 
 export const modalSlice = createSlice({
@@ -29,9 +33,15 @@ export const modalSlice = createSlice({
         },
         setOpenAddModal: (state, action)=>{
             state.openAddModal = action.payload
+        },
+        setAppToUpdate: (state, action:PayloadAction<AppModalProps>)=>{
+            state.appToUpdate = action.payload
+        },
+        setAppToUpdateModal: (state, action:PayloadAction<boolean>)=>{
+            state.openUpdateModal = action.payload
         }
 }})
 
-export const {setModalOpen, setOpenAddModal} = modalSlice.actions
+export const {setModalOpen, setOpenAddModal, setAppToUpdateModal, setAppToUpdate} = modalSlice.actions
 
 export const modalReducer = modalSlice.reducer

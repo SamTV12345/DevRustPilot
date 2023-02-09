@@ -24,7 +24,11 @@ export const Modal:FC<ModalProps>  = ({headerText,children, onCancel, onAccept, 
 
     return  openModal ? createPortal(
             <FormProvider {...methods}>
-        <form id="defaultModal" tabIndex={-1} aria-hidden="true" onClick={()=>dispatch(setModalOpen(false))} onSubmit={methods.handleSubmit(onAccept)}
+        <form id="defaultModal" tabIndex={-1} aria-hidden="true" onClick={()=>dispatch(setModalOpen(false))} onSubmit={
+            methods.handleSubmit((e)=>{
+                console.log(e)
+                onAccept(e)})}
+
                                           className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 md:inset-0 h-modal md:h-full z-40">
         <div className="grid place-items-center h-screen">
             <div className="relative rounded-lg shadow bg-gray-700 justify-center w-full md:w-2/4" onClick={(e)=>e.stopPropagation()}>
