@@ -1,7 +1,9 @@
-import { Button } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { modifyInput, modifyOutput } from './UTFConverterSlice';
 import {clipboard} from "@tauri-apps/api";
+import {Input} from "../components/Input";
+import {PrimaryButton} from "../components/PrimaryButton";
+import {CenteredBackground} from "../components/CenteredBackground";
 
 export const UTFConverter = () => {
   const input = useAppSelector(state=>state.utfReducer.input)
@@ -30,24 +32,17 @@ export const UTFConverter = () => {
       }
     }
     dispatch(modifyOutput((resultingString)))
-    // @ts-ignore
     clipboard.writeText(resultingString)
   };
 
   return (
-    <div className="d-flex align-items-center justify-content-center h-75">
-      <div className="h-50">
-        <h1 className="card-title text-center mt-3">UTF-8 to UTF-16</h1>
-        <input
-          value={input}
-          className="m-2 w-100"
-          onChange={(e) => dispatch(modifyInput(e.target.value))}
-        />
-        <Button className="m-2 w-100" onClick={() => convert(input)}>
+      <CenteredBackground className="">
+        <h1 className=" text-3xl text-white text-center">UTF-8 to UTF-16</h1>
+        <Input  onChange={(e) => dispatch(modifyInput(e))} value={input}/>
+        <PrimaryButton onClick={() => convert(input)}>
           Umwandeln
-        </Button>
-        <textarea className="m-2 w-100 h-50" disabled value={output} />
-      </div>
-    </div>
-  );
-};
+        </PrimaryButton>
+        <textarea className="text-white" disabled value={output} />
+      </CenteredBackground>
+  )
+}

@@ -1,4 +1,3 @@
-import { Dropdown, Table } from 'react-bootstrap';
 import { useEffect } from 'react';
 import { ArrowClockwise } from 'react-bootstrap-icons';
 import { ImageModel } from './ImageModel';
@@ -8,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {removeImage, setImages} from './DockerSlice';
 import {Command} from "@tauri-apps/api/shell";
+import {CenteredBackground} from "../components/CenteredBackground";
 
 export const ImageView = ()=>{
   const images = useAppSelector(state=>state.dockerReducer.images)
@@ -82,12 +82,11 @@ export const ImageView = ()=>{
     return { imageName, imageTag, imageId };
   }
 
-  return     <div className="justify-content-center space-between align-items-center overflow-auto">
-    <div className="w-75 mx-auto">
-    <span><h1 className="d-inline">Docker Images</h1></span>
+  return     <CenteredBackground>
+    <span><h1 className="text-4xl text-center">Docker Images</h1></span>
     <ArrowClockwise className="ms-2 mb-2 h2" onClick={()=>getImages()} />
 
-    <Table className="">
+    <table className="text-sm text-left text-gray-500 dark:text-gray-400 table-fixed">
       <thead>
       <tr key="image-head">
         <td>Repository</td>
@@ -119,24 +118,23 @@ export const ImageView = ()=>{
             {i.Size}
           </td>
           <td className="">
-            <Dropdown className="w-50 mx-auto">
-            <Dropdown.Toggle id="dropdown-basic" className="bg-transparent border-0">
+            <div className="w-50 mx-auto">
+            <div id="dropdown-basic" className="bg-transparent border-0">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" style={{width:'20px'}} className="bg-dark">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
             </svg>
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item onClick={()=>navigate('/docker/history', {state: { id:imageId}})}>Inspect</Dropdown.Item>
-              <Dropdown.Item onClick={()=>performPull(imageId)} disabled={imageTag.includes('none')}>Pull</Dropdown.Item>
-              <Dropdown.Item onClick={()=>performPush(imageId)} disabled={imageTag.includes('none')}>Push To Hub</Dropdown.Item>
-              <Dropdown.Item onClick={()=>deleteImage(imageId)}>Remove</Dropdown.Item>
-            </Dropdown.Menu>
-            </Dropdown>
+            </div>
+            <div>
+              <div onClick={()=>navigate('/docker/history', {state: { id:imageId}})}>Inspect</div>
+              <div onClick={()=>performPull(imageId)}>Pull</div>
+              <div onClick={()=>performPush(imageId)}>Push To Hub</div>
+              <div onClick={()=>deleteImage(imageId)}>Remove</div>
+            </div>
+            </div>
           </td>
         </tr>
       })}
       </tbody>
-    </Table>
-  </div>
-  </div>
+    </table>
+</CenteredBackground>
   }

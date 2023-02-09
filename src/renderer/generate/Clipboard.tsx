@@ -1,15 +1,15 @@
 import { FC, useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
 import { ClipboardCheck, Clipboard as ClipboardIcon } from 'react-bootstrap-icons';
 import {clipboard} from "@tauri-apps/api";
+import {PrimaryButton} from "../components/PrimaryButton";
 
 
 interface ClipboardProps {
   thingToClip: string,
-  classNames: string
+  className: string
 }
 
-export const Clipboard: FC<ClipboardProps>  = ({thingToClip, classNames})=> {
+export const Clipboard: FC<ClipboardProps>  = ({thingToClip, className})=> {
   const [clipped, setClipped] = useState<boolean>()
 
 
@@ -29,8 +29,8 @@ export const Clipboard: FC<ClipboardProps>  = ({thingToClip, classNames})=> {
     }
   }
 
-  return <Button className={classNames} onClick={sendStringToClipboard}>
+  return <PrimaryButton onClick={sendStringToClipboard} className={"h-full"}>
     {!clipped&&<ClipboardIcon/>}
     {clipped&&<ClipboardCheck/>}
-  </Button>
+  </PrimaryButton>
 }

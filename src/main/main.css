@@ -1,8 +1,7 @@
-.icon-width {
-    width: 10%;
-    height: 10%;
-    margin-right: 10px;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 
 
 .card-area{
@@ -18,4 +17,13 @@
     max-height: 300px;
     min-height: 300px;
     object-fit: cover;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
