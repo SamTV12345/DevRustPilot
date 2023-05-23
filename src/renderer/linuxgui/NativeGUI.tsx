@@ -44,13 +44,14 @@ export const NativeGUI = () => {
             <PrimaryButton onClick={()=>{
                 dispatch(setModalOpen(true))
             }}>+</PrimaryButton>
-            <div id="appArea" className="grid grid-cols-4 gap-5 mt-2">
+            <div id="appArea" className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-2">
                 {apps.map((app, index)=>{
 
 
                 return <div key={app.id}
                     className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 grid grid-rows-[min-content_1fr]">
                     <img src={app.icon} className="rounded-t-lg object-cover" alt={app.app}/>
+                    <div className="static">
                     <div className="p-5 grid grid-rows-[min-content_1fr]">
                         <div className="flex"><h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{app.app}</h5> {determineStatus(app.status)}</div>
 
@@ -75,6 +76,7 @@ export const NativeGUI = () => {
                                 }}/>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
                 })}

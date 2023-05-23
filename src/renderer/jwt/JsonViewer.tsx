@@ -4,6 +4,25 @@ import { json } from '@codemirror/lang-json';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {modifyAlgJWT, modifyDecodedJWT, modifyParsedToken, modifyRawJWT} from './JWTReducer';
 import {CenteredBackground} from "../components/CenteredBackground";
+import { invoke } from '@tauri-apps/api/tauri'
+import {enqueueSnackbar} from "notistack";
+
+
+type JsonAlgorithmModel = {
+    alg: string;
+    typ: string;
+    kid: string;
+}
+
+type JsonBackendModel = {
+    status: boolean;
+    message: string;
+    error: boolean
+}
+
+type JsonPayloadModel = {
+    iss: string
+}
 
 export const JsonViewer = () => {
   const dispatch = useAppDispatch()
@@ -19,9 +38,28 @@ export const JsonViewer = () => {
     json = json.trim()
     try {
       const tokens = json.split('.');
-
       const header = JSON.parse(window.atob(tokens[0]));
       const payload = JSON.parse(window.atob(tokens[1]));
+
+      try {
+        //const jwt: JsonAlgorithmModel = JSON.parse(JSON.stringify(header))
+        const body: JsonPayloadModel = JSON.parse(JSON.stringify(payload))
+
+        invoke('verify_certificate', {
+          url: body.iss + "/protocol/openid-connect/certs",
+          token: json
+        })
+            .then((c) => {
+              console.log(c)
+              const mappedModel = c as JsonBackendModel
+              mappedModel.error?enqueueSnackbar("JWT is invalid: "+mappedModel.message, {variant: "error"}):
+                  enqueueSnackbar("JWT is valid", {variant: "success"})
+
+            })
+      } catch (e) {
+        console.log(e)
+      }
+
       dispatch(modifyAlgJWT(JSON.stringify(header, null, 4)))
       dispatch(modifyDecodedJWT(JSON.stringify(payload, null, 4)))
       dispatch(modifyParsedToken(JSON.parse(window.atob(tokens[1]))))

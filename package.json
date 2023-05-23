@@ -28,7 +28,8 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.1",
     "tauri-plugin-sql-api": "github:tauri-apps/tauri-plugin-sql",
-    "tauri-settings": "^0.3.0"
+    "tauri-settings": "^0.3.0",
+    "notistack": "^3.0.1"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.2.3",
