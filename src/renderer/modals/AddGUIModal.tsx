@@ -12,7 +12,7 @@ const MyForm = () => {
 
     return <div className="grid grid-cols-2 gap-2">
         <label className="col-6">Logo</label>
-        <Input className="col-3 form-control" type={"file"} register={register} name="iconfile"  required
+        <Input className="col-3 form-control" type={"file"} register={register} name="iconfile"
                accept=".png,.jpg,.jpeg"/>
         <label className="col-6">Name der App</label>
         <Input className="col-6" register={register} name="app" required/>
