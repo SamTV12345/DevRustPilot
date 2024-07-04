@@ -2,21 +2,21 @@ import { useEffect, useState } from "react"
 import { Input } from "../components/Input"
 import { getNotes } from "../constants/Database"
 import { PrimaryButton } from "../components/PrimaryButton"
-import { useAppDispatch } from "../store/hooks"
+import {useAppDispatch, useAppSelector} from "../store/hooks"
 import { setModalOpen } from "../modals/ModalSlice"
 import { NotesModal } from "./NotesModal"
 import { Note } from "../models/Note"
+import {setNotes} from "../store/notesSlice";
 
 export const Notes = () => {
     const [inputForNoteSearch, setInputForNoteSearch] = useState<string>('')
-    const [notes, setNotes] = useState<Note[]>([])
+    const notes = useAppSelector(state => state.notes.notes)
     const dispatch = useAppDispatch()
 
     useEffect(()=>{
         getNotes().then(n=>{
-            setNotes(n)
+            dispatch(setNotes(n as Note[]))
         })
-    
     }, [])
 
     useEffect

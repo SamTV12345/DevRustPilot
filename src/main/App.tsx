@@ -14,6 +14,10 @@ import {NativeGUI} from "../renderer/linuxgui/NativeGUI";
 import React from "react";
 import {useAppSelector} from "../renderer/store/hooks";
 import {Notes} from "../renderer/notes/Notes";
+import {NoteSelector} from "../renderer/notes/NoteSelector";
+import {Tags} from "../renderer/notes/Tags";
+import {Links} from "../renderer/notes/Links";
+
 export const App = ()=>{
     const sideBarCollapsed = useAppSelector(state=>state.commonReducer.sideBarCollapsed)
 
@@ -34,7 +38,10 @@ export const App = ()=>{
                     <Route path="/docker/images" element={<ImageView/>}/>
                     <Route path="/docker/history" element={<HistoryDocker/>}/>
                     <Route path="/nativeui" element={<NativeGUI/>}/>
-                    <Route path="/notes" element={<Notes/>}/>
+                    <Route path="/notes" element={<NoteSelector/>}/>
+                    <Route path="/notes/notes" element={<Notes/>}/>
+                    <Route path="/notes/links" element={<Links/>}/>
+                    <Route path="/notes/tags" element={<Tags/>}/>
                 </Routes>
             </div>
         </div>

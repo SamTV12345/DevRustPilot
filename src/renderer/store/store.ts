@@ -7,6 +7,7 @@ import { alertReducer } from '../alerts/AlertReducer';
 import {NativeGUIReducer} from "../linuxgui/NativeGUISlice";
 import {modalReducer} from "../modals/ModalSlice";
 import {commonReducer} from "./commonSlice";
+import {noteReducer} from "./notesSlice";
 
 export let store = configureStore({
   reducer: {
@@ -17,7 +18,8 @@ export let store = configureStore({
     alertReducer,
     nativeGUIReducer: NativeGUIReducer,
     modalReducer,
-    commonReducer
+    commonReducer,
+    notes: noteReducer
   },
 })
 
