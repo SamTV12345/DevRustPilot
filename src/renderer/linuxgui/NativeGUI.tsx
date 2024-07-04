@@ -7,6 +7,8 @@ import {Command} from "@tauri-apps/api/shell";
 import {AppModalProps, setAppToUpdate, setAppToUpdateModal, setModalOpen} from "../modals/ModalSlice";
 import {CenteredBackground} from "../components/CenteredBackground";
 import {PrimaryButton} from "../components/PrimaryButton";
+import { AddGUIModal } from "../modals/AddGUIModal";
+import { UpdateGUIModal } from "../modals/UpdateGUIModal";
 
 export const NativeGUI = () => {
     const dispatch = useAppDispatch()
@@ -39,6 +41,8 @@ export const NativeGUI = () => {
     },[])
 
     return <CenteredBackground className="m-10">
+                        <AddGUIModal/>
+                        <UpdateGUIModal/>
         <div>
             <h1 className="text-center text-4xl">Linux GUI</h1>
             <PrimaryButton onClick={()=>{
